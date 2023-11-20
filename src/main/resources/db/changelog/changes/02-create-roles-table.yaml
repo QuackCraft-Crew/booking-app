@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-roles-table
+      author: bohdan-maksymenko
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+  - changeSet:
+      id: insert-roles
+      author: bohdan-maksymenko
+      changes:
+        - sql:
+            sql: INSERT INTO roles (id, name) VALUES (1, 'USER'), (2, 'ADMIN');

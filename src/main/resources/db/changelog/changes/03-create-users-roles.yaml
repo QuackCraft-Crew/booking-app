@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users-roles-table
+      author: bohdan-maksymenko
+      changes:
+        - createTable:
+            tableName: users_roles
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: role_id
+                  type: BIGINT
+  - changeSet:
+      id: add-foreign-keys-from-user-and-roles
+      author: bohdan-maksymenko
+      changes:
+        - addPrimaryKey:
+            columnNames: user_id, role_id
+            tableName: users_roles
