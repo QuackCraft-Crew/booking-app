@@ -2,9 +2,9 @@ package com.example.accommodationbookingservice.service.impl;
 
 import com.example.accommodationbookingservice.dto.user.UserRegistrationRequestDto;
 import com.example.accommodationbookingservice.dto.user.UserResponseDto;
-import com.example.accommodationbookingservice.entity.Role;
-import com.example.accommodationbookingservice.entity.RoleName;
-import com.example.accommodationbookingservice.entity.User;
+import com.example.accommodationbookingservice.model.Role;
+import com.example.accommodationbookingservice.model.RoleName;
+import com.example.accommodationbookingservice.model.User;
 import com.example.accommodationbookingservice.exception.RegistrationException;
 import com.example.accommodationbookingservice.mapper.UserMapper;
 import com.example.accommodationbookingservice.repository.RoleRepository;

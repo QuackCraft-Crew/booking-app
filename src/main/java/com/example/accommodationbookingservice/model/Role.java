@@ -1,4 +1,4 @@
-package com.example.accommodationbookingservice.entity;
+package com.example.accommodationbookingservice.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
