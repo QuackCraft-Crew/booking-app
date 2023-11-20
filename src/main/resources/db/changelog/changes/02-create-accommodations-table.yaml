@@ -37,7 +37,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: daily_rate
-                  type: bigint
+                  type: decimal
                   constraints:
                     nullable: false
               - column:
