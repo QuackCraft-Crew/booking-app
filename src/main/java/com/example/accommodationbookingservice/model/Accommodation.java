@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
-@Table(name = "books")
+@Table(name = "accommodations")
 @Data
 public class Accommodation {
     @Id
@@ -25,11 +25,12 @@ public class Accommodation {
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "address_id", nullable = false)
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    private Address adress;
+    private Address address;
     private String size;
     private String amenities;
     private BigDecimal dailyRate;
     private Integer availability;
+
     private enum Type {
         HOUSE,
         APARTMENT,

@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-accommodations-table
+      author: RomanYuzviak
+      changes:
+        - createTable:
+            tableName: accommodations
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: address_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: address_fk
+                    references: addresses(id)
+              - column:
+                  name: size
+                  type: varchar(1064)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amenities
+                  type: varchar(1064)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: daily_rate
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: availability
+                  type: integer
+                  constraints:
+                    nullable: false

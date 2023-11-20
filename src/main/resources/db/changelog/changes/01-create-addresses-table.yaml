@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-addresses-table
+      author: RomanYuzviak
+      changes:
+        - createTable:
+            tableName: addresses
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: street_name
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: street_number
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
