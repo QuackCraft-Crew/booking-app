@@ -15,10 +15,14 @@ import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "accommodations")
 @Data
+@SQLDelete(sql = "UPDATE accommodations SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted=false")
 public class Accommodation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +43,8 @@ public class Accommodation {
     private BigDecimal dailyRate;
     @Column(nullable = false)
     private Integer availability;
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 
     private enum Type {
         HOUSE,
