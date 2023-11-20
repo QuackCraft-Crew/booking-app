@@ -8,19 +8,19 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bygint
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: check_in
-                  type: timestamp
+                  type: date
                   constraints:
                     nullable: false
               - column:
                   name: check_out
-                  type: timestamp
+                  type: date
                   constraints:
                     nullable: false
               - column:

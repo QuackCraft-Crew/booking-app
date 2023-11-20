@@ -1,7 +1,7 @@
 package com.example.accommodationbookingservice.repository;
 
-import com.example.accommodationbookingservice.entity.Role;
-import com.example.accommodationbookingservice.entity.RoleName;
+import com.example.accommodationbookingservice.model.Role;
+import com.example.accommodationbookingservice.model.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
