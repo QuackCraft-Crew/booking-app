@@ -1,7 +1,7 @@
 package com.example.accommodationbookingservice.controller;
 
 import com.example.accommodationbookingservice.dto.accommodation.AccommodationDto;
-import com.example.accommodationbookingservice.dto.accommodation.CreateAccommodationDto;
+import com.example.accommodationbookingservice.dto.accommodation.AccommodationRequestDto;
 import com.example.accommodationbookingservice.service.AccommodationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccommodationController {
     private final AccommodationService accommodationService;
 
-
     @GetMapping
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get all accommodations")
@@ -43,14 +42,14 @@ public class AccommodationController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get accommodation by id")
     public AccommodationDto getCategoryById(@PathVariable @Positive Long id) {
-        return accommodationService.getById(id);
+        return accommodationService.findById(id);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new accommodation")
-    public AccommodationDto createCategory(@RequestBody @Valid CreateAccommodationDto requestDto) {
+    public AccommodationDto createCategory(@RequestBody @Valid AccommodationRequestDto requestDto) {
         return accommodationService.save(requestDto);
     }
 
@@ -58,7 +57,7 @@ public class AccommodationController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update accommodation by id")
     public AccommodationDto updateCategory(@PathVariable @Positive Long id,
-                                      @RequestBody @Valid CreateAccommodationDto createDto) {
+                                      @RequestBody @Valid AccommodationRequestDto createDto) {
         return accommodationService.update(id, createDto);
     }
 

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-public record CreateAccommodationDto (
+public record AccommodationRequestDto(
         @NotBlank
         Accommodation.Type type,
         @NotBlank

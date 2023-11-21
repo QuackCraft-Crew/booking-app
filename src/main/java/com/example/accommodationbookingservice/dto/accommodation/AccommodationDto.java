@@ -4,7 +4,7 @@ import com.example.accommodationbookingservice.model.Accommodation;
 import com.example.accommodationbookingservice.model.Address;
 import java.math.BigDecimal;
 
-public record AccommodationDto (
+public record AccommodationDto(
         Long id,
         Accommodation.Type type,
         Address address,
