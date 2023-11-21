@@ -10,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.Data;
@@ -21,7 +20,7 @@ import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "bookings")
-@SQLDelete(sql = "UPDATE orders SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE bookings SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted=false")
 @Data
 public class Booking {

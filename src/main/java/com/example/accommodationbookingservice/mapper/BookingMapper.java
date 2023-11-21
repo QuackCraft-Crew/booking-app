@@ -1,8 +1,8 @@
 package com.example.accommodationbookingservice.mapper;
 
+import com.example.accommodationbookingservice.dto.booking.BookUpdateDto;
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
-import com.example.accommodationbookingservice.dto.booking.BookUpdateDto;
 import com.example.accommodationbookingservice.model.Booking;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -25,6 +25,8 @@ public interface BookingMapper {
     @Mapping(target = "checkOut", source = "checkOutDate")
     Booking toBookingModel(BookingRequestDto requestDto);
 
+    @Mapping(target = "checkIn", source = "checkInDate")
+    @Mapping(target = "checkOut", source = "checkOutDate")
     void updateBooking(BookUpdateDto dto, @MappingTarget Booking booking);
 
 }
