@@ -1,6 +1,8 @@
 package com.example.accommodationbookingservice.service.impl;
 
 import static com.example.accommodationbookingservice.model.Booking.Status;
+
+import com.example.accommodationbookingservice.dto.booking.BookUpdateDto;
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
 import com.example.accommodationbookingservice.exception.EntityNotFoundException;
@@ -8,10 +10,8 @@ import com.example.accommodationbookingservice.mapper.BookingMapper;
 import com.example.accommodationbookingservice.model.Booking;
 import com.example.accommodationbookingservice.model.User;
 import com.example.accommodationbookingservice.repository.BookingRepository;
-import com.example.accommodationbookingservice.repository.UserRepository;
 import com.example.accommodationbookingservice.security.CustomUserDetailsService;
 import com.example.accommodationbookingservice.service.BookingService;
-import java.util.Collections;
 import java.util.List;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -83,5 +83,4 @@ public class BookingServiceImpl implements BookingService {
     private User getUser(Authentication authentication) {
         return (User) userDetailsService.loadUserByUsername(authentication.getName());
     }
-
 }

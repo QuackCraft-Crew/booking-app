@@ -5,7 +5,7 @@ import static com.example.accommodationbookingservice.model.Booking.Status;
 import java.util.List;
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
-import com.example.accommodationbookingservice.dto.booking.BookingUpdateDto;
+import com.example.accommodationbookingservice.dto.booking.BookUpdateDto;
 import com.example.accommodationbookingservice.service.BookingService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
@@ -43,9 +43,8 @@ public class BookingController {
             @RequestParam(value = "user_id", required = false) Long userId,
             @RequestParam(value = "status", required = false) Status status,
             @PageableDefault(size = 20, sort = "title",
-                    direction = Sort.Direction.ASC) Pageable pageable,
-             Authentication authentication) {
-        return bookingService.findByUserIdAndStatus(userId, status, pageable, authentication);
+                    direction = Sort.Direction.ASC) Pageable pageable) {
+        return bookingService.findByUserIdAndStatus(userId, status, pageable);
     }
 
     @GetMapping("/my")
@@ -57,25 +56,21 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public BookingDto getBookingsById(
-            @PathVariable @Positive Long id,
-            Authentication authentication) {
-        return bookingService.getBookingById(id, authentication);
+    public BookingDto getBookingsById(@PathVariable @Positive Long id) {
+        return bookingService.getBookingById(id);
     }
 
     @PutMapping("/{id}")
     public BookingDto updateBooking(
             @PathVariable Long id,
-            @RequestBody BookingUpdateDto bookingUpdateDto,
-            Authentication authentication) {
-        return bookingService.updateBookingById(id, bookingUpdateDto, authentication);
+            @RequestBody BookUpdateDto bookingUpdateDto) {
+        return bookingService.updateBookingById(id, bookingUpdateDto);
     }
 
     @DeleteMapping("/{id}")
     public void delete(
-            @PathVariable @Positive Long id,
-            Authentication authentication) {
-        bookingService.deleteById(id, authentication);
+            @PathVariable @Positive Long id) {
+        bookingService.deleteById(id);
     }
 
 }
