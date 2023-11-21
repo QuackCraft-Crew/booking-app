@@ -48,7 +48,6 @@ public class UserServiceImpl implements UserService {
         User user = isUserExist(userId);
         user.setRoles(setUserRole(
                 RoleName.valueOf(roleName.roleName())));
-
         return userMapper.toUserDto(userRepository.save(user));
     }
 
@@ -56,7 +55,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponseDto getInfo(Long userId) {
         return userMapper.toUserDto(userRepository.getReferenceById(userId));
-        //todo: mb some history need to show
     }
 
     @Override
