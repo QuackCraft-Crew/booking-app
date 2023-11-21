@@ -42,6 +42,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(CustomTelegramApiException.class)
+    public ResponseEntity<Object> handleTelegramApiException(
+            CustomTelegramApiException ex) {
+        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     private String getErrorMessage(ObjectError e) {
         if (e instanceof FieldError) {
             String field = ((FieldError) e).getField();

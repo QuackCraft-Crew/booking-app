@@ -1,5 +1,6 @@
 package com.example.accommodationbookingservice.service.impl;
 
+import com.example.accommodationbookingservice.exception.CustomTelegramApiException;
 import com.example.accommodationbookingservice.service.NotificationService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @Service
 public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
         implements NotificationService {
+    private static final String START_COMMAND = "/start";
+
     @Value("${bot.token}")
     private String token;
 
@@ -32,7 +35,7 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            throw new RuntimeException("Can't send message: " + e);
+            throw new CustomTelegramApiException("Can't send message: ", e);
         }
     }
 
@@ -52,7 +55,7 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
             Message message = update.getMessage();
             String userId = message.getChatId().toString();
             String firstName = message.getFrom().getFirstName();
-            if (message.getText().equals("/start")) {
+            if (message.getText().equals(START_COMMAND)) {
                 startCommandResponse(userId, firstName);
             } else {
                 sendMessage(userId, "This command is currently unavailable!");
@@ -72,7 +75,7 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            throw new RuntimeException("Message was not send: " + e);
+            throw new CustomTelegramApiException("Message was not send: ", e);
         }
     }
 
@@ -82,7 +85,7 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(this);
         } catch (TelegramApiException e) {
-            throw new RuntimeException("Can't register bot :" + e);
+            throw new CustomTelegramApiException("Can't register bot :", e);
         }
     }
 }
