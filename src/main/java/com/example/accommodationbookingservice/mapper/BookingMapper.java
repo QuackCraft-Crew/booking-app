@@ -1,6 +1,7 @@
 package com.example.accommodationbookingservice.mapper;
 
 import com.example.accommodationbookingservice.dto.booking.BookUpdateDto;
+
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
 import com.example.accommodationbookingservice.model.Booking;
@@ -28,5 +29,4 @@ public interface BookingMapper {
     @Mapping(target = "checkIn", source = "checkInDate")
     @Mapping(target = "checkOut", source = "checkOutDate")
     void updateBooking(BookUpdateDto dto, @MappingTarget Booking booking);
-
 }

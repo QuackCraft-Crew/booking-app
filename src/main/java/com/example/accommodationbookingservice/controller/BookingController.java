@@ -32,10 +32,9 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public BookingDto createBooking(
-            @RequestBody BookingRequestDto bookingRequestDto,
-            Authentication authentication) {
-        return bookingService.createBooking(bookingRequestDto, authentication);
+
+    public BookingDto createBooking(@RequestBody BookingRequestDto bookingRequestDto) {
+        return bookingService.createBooking(bookingRequestDto);
     }
 
     @GetMapping
@@ -52,7 +51,7 @@ public class BookingController {
             @PageableDefault(size = 20, sort = "title",
                     direction = Sort.Direction.ASC) Pageable pageable,
                     Authentication authentication) {
-        return bookingService.getAll(pageable, authentication);
+        return bookingService.getAll(pageable, authentication);      
     }
 
     @GetMapping("/{id}")
@@ -70,6 +69,7 @@ public class BookingController {
     @DeleteMapping("/{id}")
     public void delete(
             @PathVariable @Positive Long id) {
+
         bookingService.deleteById(id);
     }
 
