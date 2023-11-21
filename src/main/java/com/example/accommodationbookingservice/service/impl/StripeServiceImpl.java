@@ -1,8 +1,13 @@
 package com.example.accommodationbookingservice.service.impl;
 
 import com.example.accommodationbookingservice.dto.payment.CreatePayment;
+import com.example.accommodationbookingservice.dto.payment.PaymentDto;
 import com.example.accommodationbookingservice.dto.payment.PaymentResponseDto;
+import com.example.accommodationbookingservice.mapper.PaymentMapper;
+import com.example.accommodationbookingservice.repository.PaymentRepository;
+import com.example.accommodationbookingservice.service.StripeService;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.stripe.Stripe;
@@ -10,8 +15,13 @@ import com.stripe.exception.StripeException;
 import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.model.checkout.Session;
 
+import java.util.List;
+
 @Service
-public class StripeService {
+@RequiredArgsConstructor
+public class StripeServiceImpl implements StripeService {
+
+    private final PaymentRepository paymentRepository;
     private static final String SUCCESS_URL = "http://localhost:8080/success";
     private static final String CANCEL_URL = "http://localhost:8080/cancel";
     @Value("${stripe.secret.key}")
@@ -22,6 +32,7 @@ public class StripeService {
         Stripe.apiKey = secretKey;
     }
 
+    @Override
     public PaymentResponseDto createPayment(CreatePayment createPayment) {
         SessionCreateParams.Builder builder = new SessionCreateParams.Builder()
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
@@ -48,4 +59,7 @@ public class StripeService {
         }
         return new PaymentResponseDto(session.getUrl());
     }
+
+
+
 }

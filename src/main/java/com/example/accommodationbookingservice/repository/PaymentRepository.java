@@ -4,7 +4,10 @@ import com.example.accommodationbookingservice.model.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-interface PaymentRepository extends JpaRepository<Payment, Long> {
+import java.util.List;
 
+@Repository
+public interface PaymentRepository extends JpaRepository<Payment, Long> {
+
+    List<Payment> findAllByUserId(Long userId);
 }
