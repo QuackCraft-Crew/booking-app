@@ -16,6 +16,8 @@ import org.mapstruct.NullValueCheckStrategy;
 public interface BookingMapper {
     BookingDto toBookingDto(Booking booking);
 
+    @Mapping(target = "accommodationId", source = "accommodation.id")
+    @Mapping(target = "userId", source = "user.id")
     Booking toBookingModel(BookingRequestDto requestDto);
 
     void updateBooking(BookingRequestDto dto, @MappingTarget Booking booking);
