@@ -46,7 +46,7 @@ public class Accommodation {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
-    private enum Type {
+    public enum Type {
         HOUSE,
         APARTMENT,
         HOTEL
