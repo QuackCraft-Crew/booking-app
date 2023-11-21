@@ -1,10 +1,12 @@
 package com.example.accommodationbookingservice.dto.payment;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.example.accommodationbookingservice.model.Payment;
+import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-public class PaymentResponseDto {
-    private String paymentUrl;
+public record PaymentResponseDto(
+        Long id,
+        Payment.Status status,
+        Long bookingId,
+        BigDecimal amount
+) {
 }
