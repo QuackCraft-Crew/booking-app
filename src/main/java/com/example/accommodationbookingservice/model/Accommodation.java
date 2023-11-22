@@ -1,5 +1,6 @@
 package com.example.accommodationbookingservice.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
@@ -25,15 +27,19 @@ import org.hibernate.annotations.Where;
 @Where(clause = "is_deleted=false")
 public class Accommodation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type type;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @JoinColumn(name = "address_id", nullable = false)
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @MapsId
+    @OneToOne(
+            fetch = FetchType.EAGER,
+            optional = false,
+            cascade = CascadeType.PERSIST
+    )
+    @JoinColumn(name = "id", nullable = false)
     private Address address;
     @Column(nullable = false)
     private String size;
@@ -46,7 +52,7 @@ public class Accommodation {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
-    private enum Type {
+    public enum Type {
         HOUSE,
         APARTMENT,
         HOTEL
