@@ -33,8 +33,10 @@ public class BookingController {
 
     @PostMapping
 
-    public BookingDto createBooking(@RequestBody BookingRequestDto bookingRequestDto) {
-        return bookingService.createBooking(bookingRequestDto);
+    public BookingDto createBooking(
+            @RequestBody BookingRequestDto bookingRequestDto,
+            Authentication authentication) {
+        return bookingService.createBooking(bookingRequestDto, authentication);
     }
 
     @GetMapping
