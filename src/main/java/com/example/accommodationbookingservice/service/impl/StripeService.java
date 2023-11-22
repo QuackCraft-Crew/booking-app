@@ -2,6 +2,7 @@ package com.example.accommodationbookingservice.service.impl;
 
 import com.example.accommodationbookingservice.dto.payment.CreatePayment;
 import com.example.accommodationbookingservice.dto.payment.CreatePaymentResponseDto;
+import com.example.accommodationbookingservice.exception.PaymentException;
 import com.example.accommodationbookingservice.model.Booking;
 import com.example.accommodationbookingservice.model.Payment;
 import com.example.accommodationbookingservice.repository.BookingRepository;
@@ -55,7 +56,7 @@ public class StripeService {
         try {
             session = Session.create(builder.build());
         } catch (StripeException e) {
-            throw new RuntimeException("Can't create payment session", e);
+            throw new PaymentException("Can't create payment session", e);
         }
         savePayment(session, createPayment);
         return new CreatePaymentResponseDto(session.getUrl());
