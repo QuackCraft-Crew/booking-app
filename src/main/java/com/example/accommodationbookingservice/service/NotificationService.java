@@ -13,7 +13,6 @@ public interface NotificationService {
     void sendSuccessfulPaymentMessage();
 
     void sendFailedPaymentMessage();
-    void sendNotification(String notification, String chatId);
 
     void sendMessageToAdminChat(String message);
 }

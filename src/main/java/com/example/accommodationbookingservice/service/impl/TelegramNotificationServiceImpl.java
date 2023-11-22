@@ -42,11 +42,6 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
     }
 
     @Override
-    public void sendNotification(String notification) {
-
-    }
-
-    @Override
     public void sendBookingInfoCreation(Booking booking, Accommodation accommodation) {
         String message = """
                     Your booking is confirmed !
@@ -87,7 +82,7 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
     }
 
     @Override
-    public void sendNotification(String notification, String chatId) {
+    public void sendNotification(String notification) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
         sendMessage.setText(notification);
@@ -124,7 +119,7 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
 
     @Override
     public void sendMessageToAdminChat(String message) {
-        sendNotification(message, chatId);
+        sendNotification(message);
     }
 
     private void startCommandResponse(String chatId, String firstName) {
