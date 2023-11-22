@@ -39,8 +39,8 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public AccommodationDto save(AccommodationRequestDto requestDto) {
         return accommodationMapper.toDto(
-                accommodationRepository.save(accommodationMapper.toModel(requestDto))
-        );
+                accommodationRepository.save(accommodationMapper.toModel(
+                        requestDto)));
     }
 
     @Override
