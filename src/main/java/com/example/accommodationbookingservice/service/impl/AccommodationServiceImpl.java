@@ -2,6 +2,7 @@ package com.example.accommodationbookingservice.service.impl;
 
 import com.example.accommodationbookingservice.dto.accommodation.AccommodationDto;
 import com.example.accommodationbookingservice.dto.accommodation.AccommodationRequestDto;
+import com.example.accommodationbookingservice.exception.EntityNotFoundException;
 import com.example.accommodationbookingservice.mapper.AccommodationMapper;
 import com.example.accommodationbookingservice.model.Accommodation;
 import com.example.accommodationbookingservice.model.Address;
@@ -31,7 +32,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public AccommodationDto findById(Long id) {
         return accommodationMapper.toDto(accommodationRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("There is not accommodations in db by id %d"
+                new EntityNotFoundException("There is not accommodations in db by id %d"
                         .formatted(id))));
     }
 
@@ -45,8 +46,8 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public AccommodationDto update(Long id, AccommodationRequestDto requestDto) {
         Accommodation existingAccommodation = accommodationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Accommodation not found with id: " + id));
-
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Accommodation not found with id: " + id));
         Accommodation updatedAccommodation = (accommodationMapper.toModel(requestDto));
         updateModel(updatedAccommodation, existingAccommodation);
         return accommodationMapper.toDto(accommodationRepository.save(existingAccommodation));
@@ -65,8 +66,8 @@ public class AccommodationServiceImpl implements AccommodationService {
         existed.setAvailability(updated.getAvailability());
 
         Address existedAddress = addressRepository.findById(existed.getId())
-                .orElseThrow(() -> new RuntimeException("Accommodation not found with id: "
-                        + existed.getId()));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Address not found with id: " + existed.getId()));
 
         if (updated.getAddress() != null) {
             updateAddress(updated.getAddress(), existedAddress);
