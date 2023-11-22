@@ -9,7 +9,6 @@ import com.example.accommodationbookingservice.model.Address;
 import com.example.accommodationbookingservice.repository.AccommodationRepository;
 import com.example.accommodationbookingservice.repository.AddressRepository;
 import com.example.accommodationbookingservice.service.AccommodationService;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

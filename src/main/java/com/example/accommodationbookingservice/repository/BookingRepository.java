@@ -23,5 +23,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             ((:from >= b.checkIn and :from < b.checkOut) or\s
             (:to > b.checkIn and :to <= b.checkOut))
             """)
-    List<Booking> countAllByAccommodationIdAndDate(Long accommodationId, LocalDate from, LocalDate to);
+    List<Booking> countAllByAccommodationIdAndDate(Long accommodationId,
+                                                   LocalDate from, LocalDate to);
 }
