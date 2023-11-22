@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     private Set<Role> getUserRole() {
         return new HashSet<>(Collections.singletonList(
-                roleRepository.findRoleByName(RoleName.CUSTOMER)
+                roleRepository.findRoleByName(RoleName.USER)
         ));
     }
 }

@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-booking-table
-      author: Markiian Salnikov
+      id: create-payments-table
+      author: volodymyr_hr
       changes:
         - createTable:
-            tableName: bookings
+            tableName: payments
             columns:
               - column:
                   name: id
@@ -14,32 +14,31 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: check_in
-                  type: date
-                  constraints:
-                    nullable: false
-              - column:
-                  name: check_out
-                  type: date
-                  constraints:
-                    nullable: false
-              - column:
-                  name: accommodation_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_bookings_accommodations
-                    references: accommodations(id)
-              - column:
-                  name: user_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_bookings_users
-                    references: users(id)
-              - column:
                   name: status
-                  type: varchar(16)
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: booking_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_payments_bk
+                    references: bookings(id)
+              - column:
+                  name: session_url
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: session_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount_to_pay
+                  type: decimal
                   constraints:
                     nullable: false
               - column:
