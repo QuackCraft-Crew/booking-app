@@ -6,14 +6,18 @@ import com.example.accommodationbookingservice.dto.booking.BookUpdateDto;
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
 import com.example.accommodationbookingservice.exception.EntityNotFoundException;
+import com.example.accommodationbookingservice.exception.NotAvailablePlacesToBook;
 import com.example.accommodationbookingservice.mapper.BookingMapper;
+import com.example.accommodationbookingservice.model.Accommodation;
 import com.example.accommodationbookingservice.model.Booking;
 import com.example.accommodationbookingservice.model.User;
+import com.example.accommodationbookingservice.repository.AccommodationRepository;
 import com.example.accommodationbookingservice.repository.BookingRepository;
 import com.example.accommodationbookingservice.security.CustomUserDetailsService;
 import com.example.accommodationbookingservice.service.BookingService;
 import jakarta.transaction.Transactional;
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +29,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
+    private final AccommodationRepository accommodationRepository;
     private final BookingMapper bookingMapper;
     private final CustomUserDetailsService userDetailsService;
 
@@ -36,12 +41,24 @@ public class BookingServiceImpl implements BookingService {
         }
         User user = getUser(authentication);
         Booking booking = bookingMapper.toBookingModel(requestDto);
+        booking.setAccommodation(accommodationRepository.getReferenceById(requestDto.accommodationId()));
+        if (isAvailableAccommodation(booking.getAccommodation(),
+                requestDto.checkInDate(), requestDto.checkOutDate())) {
+            throw new NotAvailablePlacesToBook("We haven't available places to book in this days");
+        }
         booking.setUser(user);
         booking.setStatus(Status.PENDING);
         return bookingMapper.toBookingDto(bookingRepository.save(booking));
     }
 
-    //endpoint for admin who creates bookings for other users
+    @Override
+    public boolean isAvailableAccommodation(Accommodation accommodation,
+                                            LocalDate from, LocalDate to) {
+        long countOfBookedAccommodations = bookingRepository.countAllByAccommodationIdAndDate(
+                accommodation.getId(), from, to)
+                .size();
+        return accommodation.getAvailability() < countOfBookedAccommodations + 1;
+    }
 
     @Override
     public List<BookingDto> findByUserIdAndStatus(
