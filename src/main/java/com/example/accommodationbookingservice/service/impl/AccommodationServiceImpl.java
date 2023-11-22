@@ -79,5 +79,6 @@ public class AccommodationServiceImpl implements AccommodationService {
         existed.setStreetName(updated.getStreetName());
         existed.setStreetNumber(updated.getStreetNumber());
         existed.setCountry(updated.getCountry());
+        addressRepository.save(existed);
     }
 }
