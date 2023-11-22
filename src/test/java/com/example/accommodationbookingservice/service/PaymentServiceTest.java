@@ -1,19 +1,17 @@
 package com.example.accommodationbookingservice.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import com.example.accommodationbookingservice.dto.payment.PaymentResponseDto;
 import com.example.accommodationbookingservice.mapper.PaymentMapper;
 import com.example.accommodationbookingservice.mapper.impl.PaymentMapperImpl;
-import com.example.accommodationbookingservice.model.Booking;
 import com.example.accommodationbookingservice.model.Payment;
 import com.example.accommodationbookingservice.repository.PaymentRepository;
 import com.example.accommodationbookingservice.service.impl.PaymentServiceImpl;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
