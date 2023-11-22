@@ -28,8 +28,6 @@ public class Address {
     private String city;
     @Column(nullable = false)
     private String country;
-    @Column(nullable = true)
-    private String map_Url ;
     @Column(nullable = false)
     private boolean isDeleted = false;
 
