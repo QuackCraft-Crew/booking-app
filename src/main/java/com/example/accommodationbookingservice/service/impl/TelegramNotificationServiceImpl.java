@@ -1,8 +1,11 @@
 package com.example.accommodationbookingservice.service.impl;
 
 import com.example.accommodationbookingservice.exception.CustomTelegramApiException;
+import com.example.accommodationbookingservice.model.Accommodation;
+import com.example.accommodationbookingservice.model.Booking;
 import com.example.accommodationbookingservice.service.NotificationService;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -14,6 +17,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Service
+@RequiredArgsConstructor
 public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
         implements NotificationService {
     private static final String START_COMMAND = "/start";
@@ -40,6 +44,46 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
     }
 
     @Override
+    public void sendBookingInfoCreation(Booking booking, Accommodation accommodation) {
+        String message = """
+                    Ur booking is comfirmed !
+                    Type : %s
+                    """;
+        String formatted = String.format(message, accommodation.getType());
+        sendNotification(formatted);
+    }
+
+    @Override
+    public void sendBookingInfoDeleting(Booking booking) {
+        String message = """
+                    Ur booking is canceled !
+                    Type : %s
+                    """;
+        String formatted = String.format(message, booking.getAccommodation().getType());
+
+        sendNotification(formatted);
+    }
+
+    @Override
+    public void sendSuccessfulPaymentMessage() {
+        String messageToUser = """
+                    Hey, it's friendly notification.
+                    Booking is confirmed !
+                    """;
+        sendNotification(messageToUser);
+    }
+
+    @Override
+    public void sendFailedPaymentMessage() {
+        String messageToUser = """
+                Hey, it's friendly notification.
+                Unfortunately, there are some problems with payment process.
+                Try to contact our support manager, we are more than happy to help you!
+                """;
+        sendNotification(messageToUser);
+    }
+
+    @Override
     public String getBotUsername() {
         return name;
     }
@@ -63,6 +107,16 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
         }
     }
 
+    @PostConstruct
+    public void init() {
+        try {
+            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+            telegramBotsApi.registerBot(this);
+        } catch (TelegramApiException e) {
+            throw new CustomTelegramApiException("Can't register bot :", e);
+        }
+    }
+
     private void startCommandResponse(String chatId, String firstName) {
         String answer = "Hello, " + firstName + ", nice to meet you!";
         sendMessage(chatId, answer);
@@ -76,16 +130,6 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
             execute(message);
         } catch (TelegramApiException e) {
             throw new CustomTelegramApiException("Message was not send: ", e);
-        }
-    }
-
-    @PostConstruct
-    public void init() {
-        try {
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(this);
-        } catch (TelegramApiException e) {
-            throw new CustomTelegramApiException("Can't register bot :", e);
         }
     }
 }

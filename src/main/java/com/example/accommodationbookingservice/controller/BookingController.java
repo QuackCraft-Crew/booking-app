@@ -2,9 +2,9 @@ package com.example.accommodationbookingservice.controller;
 
 import static com.example.accommodationbookingservice.model.Booking.Status;
 
-import com.example.accommodationbookingservice.dto.booking.BookUpdateDto;
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
+import com.example.accommodationbookingservice.dto.booking.BookingUpdateDto;
 import com.example.accommodationbookingservice.service.BookingService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
@@ -69,7 +69,7 @@ public class BookingController {
     @PreAuthorize("hasRole('ADMIN')")
     public BookingDto updateBooking(
             @PathVariable Long id,
-            @RequestBody BookUpdateDto bookingUpdateDto) {
+            @RequestBody BookingUpdateDto bookingUpdateDto) {
         return bookingService.updateBookingById(id, bookingUpdateDto);
     }
 
