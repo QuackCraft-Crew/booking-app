@@ -56,8 +56,16 @@ public class AccommodationController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update accommodation by id")
-    public AccommodationDto updateCategory(@PathVariable @Positive Long id,
+    public AccommodationDto updateAccommodation(@PathVariable @Positive Long id,
                                       @RequestBody @Valid AccommodationRequestDto createDto) {
+        return accommodationService.update(id, createDto);
+    }
+
+    @PutMapping("/{id}/address/{addressId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Update accommodation by id")
+    public AccommodationDto updateAddress(@PathVariable @Positive Long id,
+                                           @RequestBody @Valid AccommodationRequestDto createDto) {
         return accommodationService.update(id, createDto);
     }
 

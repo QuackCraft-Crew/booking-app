@@ -4,7 +4,9 @@ import com.example.accommodationbookingservice.dto.accommodation.AccommodationDt
 import com.example.accommodationbookingservice.dto.accommodation.AccommodationRequestDto;
 import com.example.accommodationbookingservice.mapper.AccommodationMapper;
 import com.example.accommodationbookingservice.model.Accommodation;
+import com.example.accommodationbookingservice.model.Address;
 import com.example.accommodationbookingservice.repository.AccommodationRepository;
+import com.example.accommodationbookingservice.repository.AddressRepository;
 import com.example.accommodationbookingservice.service.AccommodationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
     private final AccommodationMapper accommodationMapper;
+    private final AddressRepository addressRepository;
 
     @Override
     public List<AccommodationDto> findAll(Pageable pageable) {
@@ -41,17 +44,39 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public AccommodationDto update(Long id, AccommodationRequestDto requestDto) {
-        if (!accommodationRepository.existsById(id)) {
-            throw new RuntimeException("There is not book in db by id %d"
-                    .formatted(id));
-        }
+        Accommodation existingAccommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Accommodation not found with id: " + id));
+
         Accommodation updatedAccommodation = (accommodationMapper.toModel(requestDto));
-        updatedAccommodation.setId(id);
-        return accommodationMapper.toDto(accommodationRepository.save(updatedAccommodation));
+        updateModel(updatedAccommodation, existingAccommodation);
+        return accommodationMapper.toDto(accommodationRepository.save(existingAccommodation));
     }
 
     @Override
     public void deleteById(Long id) {
         accommodationRepository.deleteById(id);
+    }
+
+    public void updateModel(Accommodation updated, Accommodation existed) {
+        existed.setType(updated.getType());
+        existed.setSize(updated.getSize());
+        existed.setAmenities(updated.getAmenities());
+        existed.setDailyRate(updated.getDailyRate());
+        existed.setAvailability(updated.getAvailability());
+
+        Address existedAddress = addressRepository.findById(existed.getId())
+                .orElseThrow(() -> new RuntimeException("Accommodation not found with id: "
+                        + existed.getId()));
+
+        if (updated.getAddress() != null) {
+            updateAddress(updated.getAddress(), existedAddress);
+        }
+    }
+
+    private void updateAddress(Address updated, Address existed) {
+        existed.setStreetName(updated.getStreetName());
+        existed.setStreetNumber(updated.getStreetNumber());
+        existed.setCountry(updated.getCountry());
+        addressRepository.save(existed);
     }
 }

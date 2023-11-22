@@ -1,15 +1,14 @@
 package com.example.accommodationbookingservice.dto.accommodation;
 
 import com.example.accommodationbookingservice.model.Accommodation;
-import com.example.accommodationbookingservice.model.Address;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-public record AccommodationRequestDto(
+public record UpdateAccommodationRequestDto(
         Accommodation.Type type,
-        Address address,
+        Long addressId,
         @NotBlank
         String size,
         @NotBlank
@@ -18,5 +17,5 @@ public record AccommodationRequestDto(
         BigDecimal dailyRate,
         @NotNull @Positive
         Integer availability
-){
+) {
 }
