@@ -8,9 +8,7 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public record AccommodationRequestDto(
-        @NotBlank
         Accommodation.Type type,
-        @NotBlank
         Address address,
         @NotBlank
         String size,
