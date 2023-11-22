@@ -42,7 +42,7 @@ public class BookingServiceImpl implements BookingService {
         User user = getUser(authentication);
         Booking booking = bookingMapper.toBookingModel(requestDto);
         booking.setAccommodation(accommodationRepository.getReferenceById(requestDto.accommodationId()));
-        if (isAvailableAccommodation(booking.getAccommodation(),
+        if (!isAvailableAccommodation(booking.getAccommodation(),
                 requestDto.checkInDate(), requestDto.checkOutDate())) {
             throw new NotAvailablePlacesToBook("We haven't available places to book in this days");
         }
@@ -54,10 +54,9 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public boolean isAvailableAccommodation(Accommodation accommodation,
                                             LocalDate from, LocalDate to) {
-        long countOfBookedAccommodations = bookingRepository.countAllByAccommodationIdAndDate(
-                accommodation.getId(), from, to)
-                .size();
-        return accommodation.getAvailability() < countOfBookedAccommodations + 1;
+        List<Booking> countOfBookedAccommodations = bookingRepository.countAllByAccommodationIdAndDate(
+                accommodation.getId(), from, to);
+        return accommodation.getAvailability() > countOfBookedAccommodations.size();
     }
 
     @Override
