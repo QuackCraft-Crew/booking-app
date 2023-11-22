@@ -13,6 +13,7 @@ import com.example.accommodationbookingservice.repository.BookingRepository;
 import com.example.accommodationbookingservice.security.CustomUserDetailsService;
 import com.example.accommodationbookingservice.service.BookingService;
 import jakarta.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +42,15 @@ public class   BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> findByUserIdAndStatus(
             Long userId, Status status, Pageable pageable) {
-        List<Booking> bookings = bookingRepository.findByUserIdAndStatus(userId, status);
+        List<Booking> bookings = Collections.emptyList();
+        if (userId != null && status != null) {
+            bookings = bookingRepository.findByUserIdAndStatus(userId, status);
+        } else if (userId != null) {
+            bookings = bookingRepository.findByUserId(userId);
+        } else if (status != null) {
+            bookings = bookingRepository.findByStatus(status);
+        }
+
         return bookings.stream()
                 .map(bookingMapper::toBookingDto)
                 .toList();
