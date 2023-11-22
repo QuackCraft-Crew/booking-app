@@ -13,18 +13,13 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
+                    references: addresses(id)
+                    foreignKeyName: address_id
               - column:
                   name: type
                   type: varchar(255)
                   constraints:
                     nullable: false
-              - column:
-                  name: address_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-                    foreignKeyName: address_fk
-                    references: addresses(id)
               - column:
                   name: size
                   type: varchar(1064)

@@ -18,4 +18,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             AND b.isDeleted = false
             """)
     List<Booking> getExpiredBookings();
+
+    List<Booking> findByStatus(Status status);
 }

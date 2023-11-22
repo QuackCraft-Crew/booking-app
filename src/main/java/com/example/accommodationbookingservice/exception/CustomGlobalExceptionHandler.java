@@ -1,5 +1,6 @@
 package com.example.accommodationbookingservice.exception;
 
+import java.time.DateTimeException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(DateTimeException.class)
+    public ResponseEntity<Object> handleDateTimeException(
+            DateTimeException ex) {
+        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(RegistrationException.class)
     public ResponseEntity<Object> handleRegistrationException(
             RegistrationException ex) {
@@ -46,6 +53,18 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     public ResponseEntity<Object> handleTelegramApiException(
             CustomTelegramApiException ex) {
         return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ChangePasswordException.class)
+    public ResponseEntity<Object> handleChangePasswordException(
+            ChangePasswordException ex) {
+        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<Object> handlePaymentException(
+            PaymentException ex) {
+        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private String getErrorMessage(ObjectError e) {
