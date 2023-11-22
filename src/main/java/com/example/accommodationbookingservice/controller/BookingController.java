@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public BookingDto createBooking(
             @RequestBody BookingRequestDto bookingRequestDto,
             Authentication authentication) {
@@ -40,6 +41,7 @@ public class BookingController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<BookingDto> getBookings(
             @RequestParam(value = "user_id", required = false) Long userId,
             @RequestParam(value = "status", required = false) Status status,
@@ -49,19 +51,22 @@ public class BookingController {
     }
 
     @GetMapping("/my")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<BookingDto> getUserBookings(
-            @PageableDefault(size = 20, sort = "title",
+            @PageableDefault(size = 20, sort = "status",
                     direction = Sort.Direction.ASC) Pageable pageable,
                     Authentication authentication) {
         return bookingService.getAll(pageable, authentication);      
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public BookingDto getBookingsById(@PathVariable @Positive Long id) {
         return bookingService.getBookingById(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public BookingDto updateBooking(
             @PathVariable Long id,
             @RequestBody BookUpdateDto bookingUpdateDto) {
@@ -69,6 +74,7 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(
             @PathVariable @Positive Long id) {
 
