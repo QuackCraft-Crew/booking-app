@@ -2,7 +2,11 @@ package com.example.accommodationbookingservice.controller;
 
 import com.example.accommodationbookingservice.dto.accommodation.AccommodationDto;
 import com.example.accommodationbookingservice.dto.accommodation.AccommodationRequestDto;
+import com.example.accommodationbookingservice.dto.accommodation.UpdateAccommodationRequestDto;
+import com.example.accommodationbookingservice.dto.address.AddressDto;
+import com.example.accommodationbookingservice.dto.address.UpdateAddressRequestDto;
 import com.example.accommodationbookingservice.service.AccommodationService;
+import com.example.accommodationbookingservice.service.AddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -30,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AccommodationController {
     private final AccommodationService accommodationService;
+    private final AddressService addressService;
 
     @GetMapping
     @PreAuthorize("hasRole('USER')")
@@ -57,16 +62,16 @@ public class AccommodationController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update accommodation by id")
     public AccommodationDto updateAccommodation(@PathVariable @Positive Long id,
-                                      @RequestBody @Valid AccommodationRequestDto createDto) {
+                                      @RequestBody @Valid UpdateAccommodationRequestDto createDto) {
         return accommodationService.update(id, createDto);
     }
 
-    @PutMapping("/{id}/address/{addressId}")
+    @PutMapping("/address/{addressId}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update accommodation by id")
-    public AccommodationDto updateAddress(@PathVariable @Positive Long id,
-                                           @RequestBody @Valid AccommodationRequestDto createDto) {
-        return accommodationService.update(id, createDto);
+    public AddressDto updateAddress(@PathVariable @Positive Long addressId,
+                                    @RequestBody @Valid UpdateAddressRequestDto createDto) {
+        return addressService.update(addressId, createDto);
     }
 
     @DeleteMapping("/{id}")

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public record AccommodationDto(
         Long id,
         Accommodation.Type type,
-        Address address,
+        Long addressId,
         String size,
         String amenities,
         BigDecimal dailyRate,

@@ -2,6 +2,7 @@ package com.example.accommodationbookingservice.service.impl;
 
 import com.example.accommodationbookingservice.dto.accommodation.AccommodationDto;
 import com.example.accommodationbookingservice.dto.accommodation.AccommodationRequestDto;
+import com.example.accommodationbookingservice.dto.accommodation.UpdateAccommodationRequestDto;
 import com.example.accommodationbookingservice.mapper.AccommodationMapper;
 import com.example.accommodationbookingservice.model.Accommodation;
 import com.example.accommodationbookingservice.model.Address;
@@ -12,6 +13,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,16 +45,12 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
-    public AccommodationDto update(Long id, AccommodationRequestDto requestDto) {
-        Accommodation existingAccommodation = accommodationRepository.findById(id)
+    @Transactional
+    public AccommodationDto update(Long id, UpdateAccommodationRequestDto requestDto) {
+        Accommodation accommodationFromDb = accommodationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Accommodation not found with id: " + id));
-
-        Accommodation updatedAccommodation = (accommodationMapper.toModel(requestDto));
-        updateModel(updatedAccommodation, existingAccommodation);
-// updateModel(updatedAccommodation, existingAccommodation);
-//        updatedAccommodation.getAddress().setId(id);
-//        updatedAccommodation.setId(id);
-        return accommodationMapper.toDto(accommodationRepository.save(existingAccommodation));
+        accommodationMapper.updateAccommodation(requestDto, accommodationFromDb);
+        return accommodationMapper.toDto(accommodationFromDb);
     }
 
     @Override
