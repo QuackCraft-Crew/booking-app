@@ -65,7 +65,8 @@ public class AccommodationServiceImpl implements AccommodationService {
         existed.setAvailability(updated.getAvailability());
 
         Address existedAddress = addressRepository.findById(existed.getId())
-                .orElseThrow(() -> new RuntimeException("Accommodation not found with id: " + existed.getId()));
+                .orElseThrow(() -> new RuntimeException("Accommodation not found with id: "
+                        + existed.getId()));
 
         if (updated.getAddress() != null) {
             updateAddress(updated.getAddress(), existedAddress);
