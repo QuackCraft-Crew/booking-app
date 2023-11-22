@@ -72,6 +72,7 @@ public class BookingServiceImpl implements BookingService {
                 );
         bookingMapper.updateBooking(requestDto, booking);
         booking.setStatus(requestDto.status());
+
         return bookingMapper.toBookingDto(bookingRepository.save(booking));
     }
 
