@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ScheduledTelegramNotificationServiceImpl {
-    private static final String SCHEDULE = "1 * * * * *"; //every 1 minute
+    private static final String SCHEDULE = "0 0 0 * * *"; //every day at midnight
 
     private final NotificationService notificationService;
     private final BookingService bookingService;
