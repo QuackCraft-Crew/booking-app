@@ -28,7 +28,17 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
     private String chatId;
 
     @Override
-    public void sendNotification(String notification) {
+    public String getBotUsername() {
+        return name;
+    }
+
+    @Override
+    public String getBotToken() {
+        return token;
+    }
+
+    @Override
+    public void sendNotification(String notification, String chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
         sendMessage.setText(notification);
@@ -37,16 +47,6 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
         } catch (TelegramApiException e) {
             throw new CustomTelegramApiException("Can't send message: ", e);
         }
-    }
-
-    @Override
-    public String getBotUsername() {
-        return name;
-    }
-
-    @Override
-    public String getBotToken() {
-        return token;
     }
 
     @Override
@@ -63,6 +63,21 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
         }
     }
 
+    @PostConstruct
+    public void init() {
+        try {
+            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+            telegramBotsApi.registerBot(this);
+        } catch (TelegramApiException e) {
+            throw new CustomTelegramApiException("Can't register bot :", e);
+        }
+    }
+
+    @Override
+    public void sendMessageToAdminChat(String message) {
+        sendNotification(message, chatId);
+    }
+
     private void startCommandResponse(String chatId, String firstName) {
         String answer = "Hello, " + firstName + ", nice to meet you!";
         sendMessage(chatId, answer);
@@ -76,16 +91,6 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
             execute(message);
         } catch (TelegramApiException e) {
             throw new CustomTelegramApiException("Message was not send: ", e);
-        }
-    }
-
-    @PostConstruct
-    public void init() {
-        try {
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(this);
-        } catch (TelegramApiException e) {
-            throw new CustomTelegramApiException("Can't register bot :", e);
         }
     }
 }

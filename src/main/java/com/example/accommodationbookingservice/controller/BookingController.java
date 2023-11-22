@@ -32,9 +32,8 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-
-    public BookingDto createBooking(@RequestBody BookingRequestDto bookingRequestDto) {
-        return bookingService.createBooking(bookingRequestDto);
+    public BookingDto createBooking(@RequestBody BookingRequestDto bookingRequestDto, Authentication authentication) {
+        return bookingService.createBooking(bookingRequestDto, authentication);
     }
 
     @GetMapping
@@ -69,7 +68,6 @@ public class BookingController {
     @DeleteMapping("/{id}")
     public void delete(
             @PathVariable @Positive Long id) {
-
         bookingService.deleteById(id);
     }
 

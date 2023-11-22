@@ -12,6 +12,7 @@ import com.example.accommodationbookingservice.model.User;
 import com.example.accommodationbookingservice.repository.BookingRepository;
 import com.example.accommodationbookingservice.security.CustomUserDetailsService;
 import com.example.accommodationbookingservice.service.BookingService;
+import com.example.accommodationbookingservice.service.NotificationService;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
     private final CustomUserDetailsService userDetailsService;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -78,6 +80,11 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void deleteById(Long id) {
         bookingRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Booking> getExpiredBookings() {
+        return bookingRepository.getExpiredBookings();
     }
 
     private User getUser(Authentication authentication) {
