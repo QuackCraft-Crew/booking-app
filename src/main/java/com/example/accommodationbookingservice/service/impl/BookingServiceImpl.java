@@ -13,6 +13,7 @@ import com.example.accommodationbookingservice.repository.BookingRepository;
 import com.example.accommodationbookingservice.security.CustomUserDetailsService;
 import com.example.accommodationbookingservice.service.BookingService;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -72,6 +73,7 @@ public class BookingServiceImpl implements BookingService {
                 );
         bookingMapper.updateBooking(requestDto, booking);
         booking.setStatus(requestDto.status());
+
         return bookingMapper.toBookingDto(bookingRepository.save(booking));
     }
 

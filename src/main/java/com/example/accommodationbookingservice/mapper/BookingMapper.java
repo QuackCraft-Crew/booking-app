@@ -4,11 +4,13 @@ import com.example.accommodationbookingservice.dto.booking.BookUpdateDto;
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
 import com.example.accommodationbookingservice.model.Booking;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValueCheckStrategy;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(
         componentModel = "spring",
@@ -27,5 +29,6 @@ public interface BookingMapper {
 
     @Mapping(target = "checkIn", source = "checkInDate")
     @Mapping(target = "checkOut", source = "checkOutDate")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateBooking(BookUpdateDto dto, @MappingTarget Booking booking);
 }
