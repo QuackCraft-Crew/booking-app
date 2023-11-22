@@ -49,9 +49,6 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         Accommodation updatedAccommodation = (accommodationMapper.toModel(requestDto));
         updateModel(updatedAccommodation, existingAccommodation);
-// updateModel(updatedAccommodation, existingAccommodation);
-//        updatedAccommodation.getAddress().setId(id);
-//        updatedAccommodation.setId(id);
         return accommodationMapper.toDto(accommodationRepository.save(existingAccommodation));
     }
 
@@ -79,5 +76,6 @@ public class AccommodationServiceImpl implements AccommodationService {
         existed.setStreetName(updated.getStreetName());
         existed.setStreetNumber(updated.getStreetNumber());
         existed.setCountry(updated.getCountry());
+        addressRepository.save(existed);
     }
 }
