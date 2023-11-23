@@ -122,7 +122,7 @@ public class BookingServiceImpl implements BookingService {
                         "Cannot find booking by id " + id)
                 );
 
-        bookingRepository.deleteById(id);
+        booking.setStatus(Status.CANCELED);
         notificationService.sendBookingInfoDeleting(booking);
     }
 
