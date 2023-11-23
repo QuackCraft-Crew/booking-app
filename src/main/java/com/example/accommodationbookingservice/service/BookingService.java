@@ -6,6 +6,7 @@ import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
 import com.example.accommodationbookingservice.dto.booking.BookingUpdateDto;
 import com.example.accommodationbookingservice.model.Accommodation;
+import com.example.accommodationbookingservice.model.Booking;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -29,4 +30,8 @@ public interface BookingService {
     BookingDto updateBookingById(Long id, BookingUpdateDto updateDto);
 
     void deleteById(Long id);
+
+    List<Booking> getExpiredBookings();
+
+    void updateBookingStatusToExpired(List<Booking> bookings);
 }

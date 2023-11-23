@@ -41,7 +41,7 @@ public class AccommodationController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get accommodation by id")
-    public AccommodationDto getCategoryById(@PathVariable @Positive Long id) {
+    public AccommodationDto getAccommodationById(@PathVariable @Positive Long id) {
         return accommodationService.findById(id);
     }
 
@@ -49,7 +49,8 @@ public class AccommodationController {
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new accommodation")
-    public AccommodationDto createCategory(@RequestBody @Valid AccommodationRequestDto requestDto) {
+    public AccommodationDto createAccommodation(
+            @RequestBody @Valid AccommodationRequestDto requestDto) {
         return accommodationService.save(requestDto);
     }
 
@@ -73,7 +74,7 @@ public class AccommodationController {
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete accommodation by id")
-    public void deleteCategory(@PathVariable @Positive Long id) {
+    public void deleteAccommodation(@PathVariable @Positive Long id) {
         accommodationService.deleteById(id);
     }
 }

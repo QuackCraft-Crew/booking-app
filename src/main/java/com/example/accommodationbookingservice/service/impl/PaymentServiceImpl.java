@@ -6,6 +6,7 @@ import com.example.accommodationbookingservice.mapper.PaymentMapper;
 import com.example.accommodationbookingservice.model.Booking;
 import com.example.accommodationbookingservice.model.Payment;
 import com.example.accommodationbookingservice.repository.PaymentRepository;
+import com.example.accommodationbookingservice.service.NotificationService;
 import com.example.accommodationbookingservice.service.PaymentService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentRepository paymentRepository;
     @Autowired
     private PaymentMapper paymentMapper;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     @Transactional
@@ -27,6 +30,7 @@ public class PaymentServiceImpl implements PaymentService {
         Booking booking = payment.getBooking();
         booking.setStatus(Booking.Status.CONFIRMED);
         payment.setStatus(Payment.Status.PAID);
+        notificationService.sendSuccessfulPaymentMessage();
     }
 
     @Override
@@ -37,6 +41,7 @@ public class PaymentServiceImpl implements PaymentService {
         Booking booking = payment.getBooking();
         booking.setStatus(Booking.Status.CANCELED);
         payment.setStatus(Payment.Status.CANCELED);
+        notificationService.sendFailedPaymentMessage();
     }
 
     @Override

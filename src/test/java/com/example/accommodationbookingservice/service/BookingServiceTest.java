@@ -264,7 +264,7 @@ class BookingServiceTest {
         deletedBooking.setStatus(Booking.Status.CANCELED);
 
         bookingService.deleteById(bookingId);
-        verify(notificationService).sendBookingInfoDeleting(deletedBooking);
+        verify(notificationService).sendBookingInfoDeletion();
 
     }
 
