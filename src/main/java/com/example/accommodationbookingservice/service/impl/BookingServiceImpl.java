@@ -56,7 +56,6 @@ public class BookingServiceImpl implements BookingService {
         Accommodation accommodation = accommodationRepository
                 .findAccommodationByBookingId(bookingDto.id());
         notificationService.sendBookingInfoCreation(booking, accommodation);
-
         return bookingDto;
     }
 
@@ -122,7 +121,17 @@ public class BookingServiceImpl implements BookingService {
                 );
 
         booking.setStatus(Status.CANCELED);
-        notificationService.sendBookingInfoDeleting(booking);
+        notificationService.sendBookingInfoDeletion();
+    }
+
+    @Override
+    public List<Booking> getExpiredBookings() {
+        return bookingRepository.getExpiredBookings();
+    }
+
+    @Override
+    public void updateBookingStatusToExpired(List<Booking> bookings) {
+        bookings.forEach(booking -> booking.setStatus(Status.EXPIRED));
     }
 
     private User getUser(Authentication authentication) {

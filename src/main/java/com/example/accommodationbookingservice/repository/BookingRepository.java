@@ -14,6 +14,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByUserId(Long userId);
 
+    @Query("""
+            SELECT b FROM Booking b
+            WHERE b.checkOut BETWEEN CURRENT_DATE AND (CURRENT_DATE + 1)
+            AND b.isDeleted = false
+            AND b.status <> 'EXPIRED'
+            """)
+    List<Booking> getExpiredBookings();
+
     List<Booking> findByStatus(Status status);
 
     @Query(value = """

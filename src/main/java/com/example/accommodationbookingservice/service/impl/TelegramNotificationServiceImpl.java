@@ -32,36 +32,44 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
     private String chatId;
 
     @Override
-    public void sendNotification(String notification) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText(notification);
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            throw new CustomTelegramApiException("Can't send message: ", e);
-        }
+    public String getBotUsername() {
+        return name;
+    }
+
+    @Override
+    public String getBotToken() {
+        return token;
     }
 
     @Override
     public void sendBookingInfoCreation(Booking booking, Accommodation accommodation) {
         String message = """
-                    Ur booking is comfirmed !
+                    Your booking is confirmed !
                     Type : %s
+                    Country: %s
+                    City: %s
+                    Address: %s %s
+                    Check-in time: %s
+                    Check-out time: %S
                     """;
-        String formatted = String.format(message, accommodation.getType());
+        String formatted = String.format(message,
+                accommodation.getType(),
+                accommodation.getAddress().getCountry(),
+                accommodation.getAddress().getCity(),
+                accommodation.getAddress().getStreetName(),
+                accommodation.getAddress().getStreetNumber(),
+                booking.getCheckIn(),
+                booking.getCheckOut());
         sendNotification(formatted);
     }
 
     @Override
-    public void sendBookingInfoDeleting(Booking booking) {
+    public void sendBookingInfoDeletion() {
         String message = """
-                    Ur booking is canceled !
-                    Type : %s
+                    Your booking is canceled !
+                    Have a great day!
                     """;
-        String formatted = String.format(message, booking.getAccommodation().getType());
-
-        sendNotification(formatted);
+        sendNotification(message);
     }
 
     @Override
@@ -84,13 +92,15 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
     }
 
     @Override
-    public String getBotUsername() {
-        return name;
-    }
-
-    @Override
-    public String getBotToken() {
-        return token;
+    public void sendNotification(String notification) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chatId));
+        sendMessage.setText(notification);
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new CustomTelegramApiException("Can't send message: ", e);
+        }
     }
 
     @Override
@@ -115,6 +125,35 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
         } catch (TelegramApiException e) {
             throw new CustomTelegramApiException("Can't register bot :", e);
         }
+    }
+
+    @Override
+    public void sendMessageToAdminChat(String message) {
+        sendNotification(message);
+    }
+
+    @Override
+    public void sendReleasedAccommodationNotification(Accommodation accommodation) {
+        String message = """
+                Hey, there is new accommodation available!
+                Check it out:
+                City: %s
+                Address: %s %s
+                Type: %s
+                Size: %s
+                Amenities: %s
+                Daily rate: %s
+                """;
+        String formatted = String.format(message,
+                accommodation.getAddress().getCity(),
+                accommodation.getAddress().getStreetName(),
+                accommodation.getAddress().getStreetNumber(),
+                accommodation.getType(),
+                accommodation.getSize(),
+                accommodation.getAmenities(),
+                accommodation.getDailyRate()
+        );
+        sendNotification(formatted);
     }
 
     private void startCommandResponse(String chatId, String firstName) {

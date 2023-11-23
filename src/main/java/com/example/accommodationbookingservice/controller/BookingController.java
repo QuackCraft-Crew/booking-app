@@ -1,10 +1,9 @@
 package com.example.accommodationbookingservice.controller;
 
-import static com.example.accommodationbookingservice.model.Booking.Status;
-
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
 import com.example.accommodationbookingservice.dto.booking.BookingUpdateDto;
+import com.example.accommodationbookingservice.model.Booking.Status;
 import com.example.accommodationbookingservice.service.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,14 +34,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookingController {
     private final BookingService bookingService;
 
-    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Create booking",
             description = "Create new booking by accommodation check in and check out dates")
-    public BookingDto createBooking(
-            @RequestBody BookingRequestDto bookingRequestDto,
-            Authentication authentication) {
+    @PostMapping
+    public BookingDto createBooking(@RequestBody BookingRequestDto bookingRequestDto,
+                                    Authentication authentication) {
         return bookingService.createBooking(bookingRequestDto, authentication);
     }
 

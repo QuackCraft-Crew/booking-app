@@ -8,9 +8,13 @@ public interface NotificationService {
 
     void sendBookingInfoCreation(Booking booking, Accommodation accommodation);
 
-    void sendBookingInfoDeleting(Booking booking);
+    void sendBookingInfoDeletion();
 
     void sendSuccessfulPaymentMessage();
 
     void sendFailedPaymentMessage();
+
+    void sendMessageToAdminChat(String message);
+
+    void sendReleasedAccommodationNotification(Accommodation accommodation);
 }
