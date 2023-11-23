@@ -20,6 +20,7 @@ import com.example.accommodationbookingservice.repository.AccommodationRepositor
 import com.example.accommodationbookingservice.repository.BookingRepository;
 import com.example.accommodationbookingservice.security.CustomUserDetailsService;
 import com.example.accommodationbookingservice.service.impl.BookingServiceImpl;
+import com.example.accommodationbookingservice.service.impl.EmailSenderService;
 import java.math.BigDecimal;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -48,6 +49,8 @@ class BookingServiceTest {
     private AccommodationRepository accommodationRepository;
     @Mock
     private Authentication authentication;
+    @Mock
+    private EmailSenderService emailSenderService;
     @Mock
     private CustomUserDetailsService userDetailsService;
     @Mock
