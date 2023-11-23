@@ -136,7 +136,9 @@ public class BookingServiceImpl implements BookingService {
                 );
 
         booking.setStatus(Status.CANCELED);
-        notificationService.sendBookingInfoDeletion();
+        executorService.execute(
+                () -> notificationService.sendBookingInfoDeletion()
+        );
     }
 
     @Override
