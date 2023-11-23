@@ -6,6 +6,7 @@ import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
 import com.example.accommodationbookingservice.dto.booking.BookingUpdateDto;
 import com.example.accommodationbookingservice.exception.EntityNotFoundException;
+import com.example.accommodationbookingservice.exception.NotAvailablePlacesToBook;
 import com.example.accommodationbookingservice.mapper.BookingMapper;
 import com.example.accommodationbookingservice.model.Accommodation;
 import com.example.accommodationbookingservice.model.Booking;
@@ -17,6 +18,7 @@ import com.example.accommodationbookingservice.service.BookingService;
 import com.example.accommodationbookingservice.service.NotificationService;
 import jakarta.transaction.Transactional;
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -41,15 +43,28 @@ public class BookingServiceImpl implements BookingService {
         }
         User user = getUser(authentication);
         Booking booking = bookingMapper.toBookingModel(requestDto);
+        booking.setAccommodation(accommodationRepository
+                .getReferenceById(requestDto.accommodationId()));
+        if (!isAvailableAccommodation(booking.getAccommodation(),
+                requestDto.checkInDate(), requestDto.checkOutDate())) {
+            throw new NotAvailablePlacesToBook("We haven't available places to book in this days");
+        }
         booking.setUser(user);
         booking.setStatus(Status.PENDING);
 
         BookingDto bookingDto = bookingMapper.toBookingDto(bookingRepository.save(booking));
         Accommodation accommodation = accommodationRepository
-                .findAccommodationByBookingId(booking.getId());
-
+                .findAccommodationByBookingId(bookingDto.id());
         notificationService.sendBookingInfoCreation(booking, accommodation);
         return bookingDto;
+    }
+
+    @Override
+    public boolean isAvailableAccommodation(Accommodation accommodation,
+                                            LocalDate from, LocalDate to) {
+        List<Booking> countOfBookedAccommodations = bookingRepository
+                .countAllByAccommodationIdAndDate(accommodation.getId(), from, to);
+        return accommodation.getAvailability() > countOfBookedAccommodations.size();
     }
 
     @Override
@@ -72,7 +87,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> getAll(Pageable pageable, Authentication authentication) {
         User user = getUser(authentication);
-
         return bookingRepository.findByUserId(user.getId()).stream()
                 .map(bookingMapper::toBookingDto)
                 .toList();
@@ -101,7 +115,12 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public void deleteById(Long id) {
-        bookingRepository.deleteById(id);
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Cannot find booking by id " + id)
+                );
+
+        booking.setStatus(Status.CANCELED);
         notificationService.sendBookingInfoDeletion();
     }
 

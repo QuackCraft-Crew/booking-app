@@ -16,6 +16,9 @@ public interface BookingService {
 
     BookingDto createBooking(BookingRequestDto booking, Authentication authentication);
 
+    boolean isAvailableAccommodation(Accommodation accommodation,
+                                     LocalDate from, LocalDate to);
+
     List<BookingDto> findByUserIdAndStatus(Long userId, Status status, Pageable pageable);
 
     List<BookingDto> getAll(Pageable pageable, Authentication authentication);
