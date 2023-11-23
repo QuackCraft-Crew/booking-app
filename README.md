@@ -130,7 +130,7 @@ We designed and implemented all the **necessary business processes** that will c
 
 ---
 
-## Authentication Controller:
+## **Authentication Controller:**
 
 | **HTTP method** | **Endpoint**  | **Role** | **Function** |
 |:----------------:|:--------------:|:--------:|:-------------|
@@ -139,7 +139,7 @@ We designed and implemented all the **necessary business processes** that will c
 
 ---
 
-## User Controller: Managing authentication and user registration
+## **User Controller:** _Managing authentication and user registration_
 
 | **HTTP method** | **Endpoint**          | **Role** | **Function**                                                        |
 |:----------------:|:----------------------:|:--------:|:--------------------------------------------------------------------|
@@ -149,7 +149,7 @@ We designed and implemented all the **necessary business processes** that will c
 
 ---
 
-## Accommodation Controller: Managing accommodation inventory (CRUD for Accommodations)
+## **Accommodation Controller:** _Managing accommodation inventory (CRUD for Accommodations)_
 
 | **HTTP method** | **Endpoint**         | **Role** | **Function**                                         |
 |:----------------:|:---------------------:|:--------:|:-----------------------------------------------------|
@@ -161,7 +161,7 @@ We designed and implemented all the **necessary business processes** that will c
 
 ---
 
-## Booking Controller: Managing users' bookings
+## **Booking Controller**: _Managing users' bookings_.
 
 | **HTTP method** | **Endpoint**         | **Role**   | **Function**                                          |
 |:----------------:|:---------------------:|:----------:|:------------------------------------------------------|
@@ -174,7 +174,7 @@ We designed and implemented all the **necessary business processes** that will c
 
 ---
 
-## Payment Controller (Stripe): Facilitates payments for bookings through the platform. Interacts with Stripe API. Use stripe-java library.
+## **Payment Controller (Stripe)**: _Facilitates payments for bookings through the platform. Interacts with Stripe API. Use stripe-java library._
 
 | **HTTP method** | **Endpoint**         | **Role**   | **Function**                                         |
 |:----------------:|:---------------------:|:----------:|:-----------------------------------------------------|
@@ -182,3 +182,20 @@ We designed and implemented all the **necessary business processes** that will c
 | POST             | /payments/            | ALL        | Initiates payment sessions for booking transactions. |
 | GET              | /payments/success/    | ALL        | Handles successful payment processing through Stripe redirection. |
 | GET              | /payments/cancel/     | ALL        | Manages payment cancellation and returns payment paused messages during Stripe redirection. |
+ 
+
+---
+
+# About notification:
+
+\
+`Notifications about:` \
+`- new bookings created/canceled,` \
+`- new created/released accommodations,` \
+`- and successful payments` \
+`Other services interact with it to send notifications to booking service administrators.` 
+
+###### Used Telegram API, Telegram Chats, and Bots.
+
+---
+
