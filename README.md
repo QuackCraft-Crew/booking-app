@@ -199,3 +199,13 @@ We designed and implemented all the **necessary business processes** that will c
 
 ---
 
+# How to launch our application?
+
+1. Install Docker from the official website: https://www.docker.com/products/docker-desktop/
+2. Clone this repository from GitHub
+3. Create a .env file with the necessary environment variables(use .env.sample as a reference)
+4. Run the command `mvn clean package`
+5. Build and start the Docker containers with `docker-compose up --build`
+6. The application should be running locally at http://localhost:8088
+7. Swagger is available for testing at http://localhost:8088/swagger-ui/index.html#/
+
