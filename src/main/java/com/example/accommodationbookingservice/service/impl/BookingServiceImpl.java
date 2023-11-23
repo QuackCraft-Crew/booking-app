@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final CustomUserDetailsService userDetailsService;
     private final NotificationService notificationService;
+    private final ExecutorService executorService;
     private final EmailSenderService emailSenderService;
 
     @SneakyThrows
@@ -61,9 +63,13 @@ public class BookingServiceImpl implements BookingService {
         Accommodation accommodation = accommodationRepository
                 .findAccommodationByBookingId(bookingDto.id());
 
-        notificationService.sendBookingInfoCreation(booking, accommodation);
+        executorService.execute(
+                () -> notificationService.sendBookingInfoCreation(booking, accommodation)
+        );
+
         emailSenderService.sendHtmlEmail(user.getEmail(), "Success booking",
                 getStringObjectMap(booking, accommodation));
+
         return bookingDto;
     }
 
@@ -130,7 +136,9 @@ public class BookingServiceImpl implements BookingService {
                 );
 
         booking.setStatus(Status.CANCELED);
-        notificationService.sendBookingInfoDeletion();
+        executorService.execute(
+                () -> notificationService.sendBookingInfoDeletion()
+        );
     }
 
     @Override

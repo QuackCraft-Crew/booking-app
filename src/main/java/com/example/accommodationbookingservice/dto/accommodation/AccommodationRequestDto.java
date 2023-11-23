@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 public record AccommodationRequestDto(
         Accommodation.Type type,
         Address address,
-        String map_Url,
         @NotBlank
         String size,
         @NotBlank
