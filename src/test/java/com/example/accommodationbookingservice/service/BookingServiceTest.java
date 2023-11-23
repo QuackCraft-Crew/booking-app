@@ -262,11 +262,9 @@ class BookingServiceTest {
         Booking deletedBooking = getDefaultBooking();
         deletedBooking.setId(bookingId);
         deletedBooking.setStatus(Booking.Status.CANCELED);
-        Accommodation accommodation = accommodationRepository
-                .findAccommodationByBookingId(bookingId);
 
         bookingService.deleteById(bookingId);
-        verify(notificationService).sendBookingInfoCreation(deletedBooking, accommodation);
+        verify(notificationService).sendBookingInfoDeletion();
 
     }
 
