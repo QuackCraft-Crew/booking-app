@@ -72,7 +72,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> getAll(Pageable pageable, Authentication authentication) {
         User user = getUser(authentication);
-
+        authentication.getAuthorities().stream().forEach(System.out::println);
         return bookingRepository.findByUserId(user.getId()).stream()
                 .map(bookingMapper::toBookingDto)
                 .toList();
