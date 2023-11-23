@@ -14,6 +14,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final NotificationService notificationService;
 
     @Override
+    @Transactional
     public List<AccommodationDto> findAll(Pageable pageable) {
         return accommodationRepository.findAll(pageable).stream()
                 .map(accommodationMapper::toDto)
