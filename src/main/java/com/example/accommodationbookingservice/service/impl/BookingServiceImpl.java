@@ -54,7 +54,7 @@ public class BookingServiceImpl implements BookingService {
 
         BookingDto bookingDto = bookingMapper.toBookingDto(bookingRepository.save(booking));
         Accommodation accommodation = accommodationRepository
-                .findAccommodationByBookingId(booking.getId());
+                .findAccommodationByBookingId(bookingDto.id());
         notificationService.sendBookingInfoCreation(booking, accommodation);
 
         return bookingDto;
@@ -88,7 +88,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> getAll(Pageable pageable, Authentication authentication) {
         User user = getUser(authentication);
-        authentication.getAuthorities().stream().forEach(System.out::println);
         return bookingRepository.findByUserId(user.getId()).stream()
                 .map(bookingMapper::toBookingDto)
                 .toList();
