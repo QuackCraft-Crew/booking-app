@@ -47,8 +47,8 @@ public class BookingServiceImpl implements BookingService {
         BookingDto bookingDto = bookingMapper.toBookingDto(bookingRepository.save(booking));
         Accommodation accommodation = accommodationRepository
                 .findAccommodationByBookingId(booking.getId());
-        notificationService.sendBookingInfoCreation(booking, accommodation);
 
+        notificationService.sendBookingInfoCreation(booking, accommodation);
         return bookingDto;
     }
 
@@ -101,13 +101,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public void deleteById(Long id) {
-        Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Cannot find booking by id " + id)
-                );
-
         bookingRepository.deleteById(id);
-        notificationService.sendBookingInfoDeleting(booking);
+        notificationService.sendBookingInfoDeletion();
     }
 
     @Override
@@ -117,9 +112,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void updateBookingStatusToExpired(List<Booking> bookings) {
-        bookings.forEach(booking -> {
-            booking.setStatus(Status.EXPIRED);
-        });
+        bookings.forEach(booking -> booking.setStatus(Status.EXPIRED));
     }
 
     private User getUser(Authentication authentication) {

@@ -8,7 +8,7 @@ public interface NotificationService {
 
     void sendBookingInfoCreation(Booking booking, Accommodation accommodation);
 
-    void sendBookingInfoDeleting(Booking booking);
+    void sendBookingInfoDeletion();
 
     void sendSuccessfulPaymentMessage();
 

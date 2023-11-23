@@ -46,20 +46,30 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
         String message = """
                     Your booking is confirmed !
                     Type : %s
+                    Country: %s
+                    City: %s
+                    Address: %s %s
+                    Check-in time: %s
+                    Check-out time: %S
                     """;
-        String formatted = String.format(message, accommodation.getType());
+        String formatted = String.format(message,
+                accommodation.getType(),
+                accommodation.getAddress().getCountry(),
+                accommodation.getAddress().getCity(),
+                accommodation.getAddress().getStreetName(),
+                accommodation.getAddress().getStreetNumber(),
+                booking.getCheckIn(),
+                booking.getCheckOut());
         sendNotification(formatted);
     }
 
     @Override
-    public void sendBookingInfoDeleting(Booking booking) {
+    public void sendBookingInfoDeletion() {
         String message = """
                     Your booking is canceled !
-                    Type : %s
+                    Have a great day!
                     """;
-        String formatted = String.format(message, booking.getAccommodation().getType());
-
-        sendNotification(formatted);
+        sendNotification(message);
     }
 
     @Override
