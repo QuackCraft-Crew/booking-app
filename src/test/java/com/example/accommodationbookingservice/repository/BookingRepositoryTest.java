@@ -17,7 +17,8 @@ public class BookingRepositoryTest {
     private BookingRepository bookingRepository;
 
     @Test
-    @Sql(scripts = {"classpath:database/addresses/insert-address.sql",
+    @Sql(scripts = {"classpath:database/all/delete-all.sql",
+            "classpath:database/addresses/insert-address.sql",
             "classpath:database/accommodations/insert-accommodation.sql",
             "classpath:database/users/insert-users.sql",
             "classpath:database/bookings/insert-bookings.sql",
@@ -31,7 +32,8 @@ public class BookingRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"classpath:database/addresses/insert-address.sql",
+    @Sql(scripts = {"classpath:database/all/delete-all.sql",
+            "classpath:database/addresses/insert-address.sql",
             "classpath:database/accommodations/insert-accommodation.sql",
             "classpath:database/users/insert-users.sql",
             "classpath:database/bookings/insert-bookings.sql"},
