@@ -33,7 +33,7 @@ public class Accommodation {
     @EqualsAndHashCode.Exclude
     @MapsId
     @OneToOne(
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             optional = false,
             cascade = CascadeType.PERSIST
     )

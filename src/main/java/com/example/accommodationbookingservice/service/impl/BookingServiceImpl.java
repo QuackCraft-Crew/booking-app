@@ -20,9 +20,12 @@ import jakarta.transaction.Transactional;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -36,7 +39,9 @@ public class BookingServiceImpl implements BookingService {
     private final CustomUserDetailsService userDetailsService;
     private final NotificationService notificationService;
     private final ExecutorService executorService;
+    private final EmailSenderService emailSenderService;
 
+    @SneakyThrows
     @Override
     @Transactional
     public BookingDto createBooking(BookingRequestDto requestDto, Authentication authentication) {
@@ -61,6 +66,9 @@ public class BookingServiceImpl implements BookingService {
         executorService.execute(
                 () -> notificationService.sendBookingInfoCreation(booking, accommodation)
         );
+
+        emailSenderService.sendHtmlEmail(user.getEmail(), "Success booking",
+                getStringObjectMap(booking, accommodation));
 
         return bookingDto;
     }
@@ -93,6 +101,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> getAll(Pageable pageable, Authentication authentication) {
         User user = getUser(authentication);
+
         return bookingRepository.findByUserId(user.getId()).stream()
                 .map(bookingMapper::toBookingDto)
                 .toList();
@@ -127,7 +136,7 @@ public class BookingServiceImpl implements BookingService {
                 );
 
         booking.setStatus(Status.CANCELED);
-        executorService.execute(notificationService::sendBookingInfoDeletion);
+        notificationService.sendBookingInfoDeletion();
     }
 
     @Override
@@ -138,6 +147,19 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void updateBookingStatusToExpired(List<Booking> bookings) {
         bookings.forEach(booking -> booking.setStatus(Status.EXPIRED));
+    }
+
+    private static Map<String, Object> getStringObjectMap(Booking booking,
+                                                          Accommodation accommodation) {
+        Map<String, Object> templateModel = new HashMap<>();
+        templateModel.put("type", accommodation.getType());
+        templateModel.put("country", accommodation.getAddress().getCountry());
+        templateModel.put("city", accommodation.getAddress().getCity());
+        templateModel.put("address", accommodation.getAddress().getStreetName()
+                + ", " + accommodation.getAddress().getStreetNumber());
+        templateModel.put("checkIn", booking.getCheckIn());
+        templateModel.put("checkOut", booking.getCheckOut());
+        return templateModel;
     }
 
     private User getUser(Authentication authentication) {
