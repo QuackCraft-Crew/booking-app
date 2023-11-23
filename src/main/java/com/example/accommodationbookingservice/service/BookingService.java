@@ -27,4 +27,6 @@ public interface BookingService {
     void deleteById(Long id);
 
     List<Booking> getExpiredBookings();
+
+    void updateBookingStatusToExpired(List<Booking> bookings);
 }

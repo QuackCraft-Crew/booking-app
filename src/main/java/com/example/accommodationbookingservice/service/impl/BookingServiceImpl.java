@@ -115,6 +115,13 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.getExpiredBookings();
     }
 
+    @Override
+    public void updateBookingStatusToExpired(List<Booking> bookings) {
+        bookings.forEach(booking -> {
+            booking.setStatus(Status.EXPIRED);
+        });
+    }
+
     private User getUser(Authentication authentication) {
         return (User) userDetailsService.loadUserByUsername(authentication.getName());
     }

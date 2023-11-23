@@ -4,6 +4,7 @@ import com.example.accommodationbookingservice.model.Booking;
 import com.example.accommodationbookingservice.service.BookingService;
 import com.example.accommodationbookingservice.service.NotificationService;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,12 +21,18 @@ public class ScheduledTelegramNotificationServiceImpl {
     @Transactional
     @Scheduled(cron = SCHEDULE)
     public void reportCurrentTime() {
-        String expiredBookings = bookingService.getExpiredBookings().stream()
-                .map(this::createBookingInfo)
-                .collect(Collectors.joining());
-        String message = (expiredBookings.isBlank()) ? "No expired bookings today!" :
-                expiredBookings;
-        notificationService.sendMessageToAdminChat(message);
+        List<Booking> expiredBookings = bookingService.getExpiredBookings();
+        if (!expiredBookings.isEmpty()) {
+            bookingService.updateBookingStatusToExpired(expiredBookings);
+
+            String message = expiredBookings.stream()
+                    .map(this::createBookingInfo)
+                    .collect(Collectors.joining());
+
+            notificationService.sendMessageToAdminChat(message);
+        } else {
+            notificationService.sendMessageToAdminChat("No expired bookings today!");
+        }
     }
 
     private String createBookingInfo(Booking booking) {
