@@ -127,13 +127,6 @@ We designed and implemented all the **necessary business processes** that will c
 
 # Project controllers with the following endpoints:
 
-# API Endpoints Overview
-
-1. [Authentication Controller](#authentication-controller)
-2. [User Controller](#user-controller)
-3. [Accommodation Controller](#accommodation-controller)
-4. [Booking Controller](#booking-controller)
-5. [Payment Controller (Stripe)](#payment-controller-stripe)
 
 ---
 
