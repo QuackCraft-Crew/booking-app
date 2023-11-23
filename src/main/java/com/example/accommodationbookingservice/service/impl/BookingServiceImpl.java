@@ -2,9 +2,9 @@ package com.example.accommodationbookingservice.service.impl;
 
 import static com.example.accommodationbookingservice.model.Booking.Status;
 
-import com.example.accommodationbookingservice.dto.booking.BookUpdateDto;
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
+import com.example.accommodationbookingservice.dto.booking.BookingUpdateDto;
 import com.example.accommodationbookingservice.exception.EntityNotFoundException;
 import com.example.accommodationbookingservice.exception.NotAvailablePlacesToBook;
 import com.example.accommodationbookingservice.mapper.BookingMapper;
@@ -15,6 +15,7 @@ import com.example.accommodationbookingservice.repository.AccommodationRepositor
 import com.example.accommodationbookingservice.repository.BookingRepository;
 import com.example.accommodationbookingservice.security.CustomUserDetailsService;
 import com.example.accommodationbookingservice.service.BookingService;
+import com.example.accommodationbookingservice.service.NotificationService;
 import jakarta.transaction.Transactional;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -32,6 +33,7 @@ public class BookingServiceImpl implements BookingService {
     private final AccommodationRepository accommodationRepository;
     private final BookingMapper bookingMapper;
     private final CustomUserDetailsService userDetailsService;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -49,7 +51,13 @@ public class BookingServiceImpl implements BookingService {
         }
         booking.setUser(user);
         booking.setStatus(Status.PENDING);
-        return bookingMapper.toBookingDto(bookingRepository.save(booking));
+
+        BookingDto bookingDto = bookingMapper.toBookingDto(bookingRepository.save(booking));
+        Accommodation accommodation = accommodationRepository
+                .findAccommodationByBookingId(booking.getId());
+        notificationService.sendBookingInfoCreation(booking, accommodation);
+
+        return bookingDto;
     }
 
     @Override
@@ -95,7 +103,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto updateBookingById(Long id, BookUpdateDto requestDto) {
+    public BookingDto updateBookingById(Long id, BookingUpdateDto requestDto) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can`t find booking by id " + id)
@@ -107,8 +115,15 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Cannot find booking by id " + id)
+                );
+
         bookingRepository.deleteById(id);
+        notificationService.sendBookingInfoDeleting(booking);
     }
 
     private User getUser(Authentication authentication) {

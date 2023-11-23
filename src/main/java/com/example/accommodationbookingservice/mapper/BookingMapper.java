@@ -1,8 +1,8 @@
 package com.example.accommodationbookingservice.mapper;
 
-import com.example.accommodationbookingservice.dto.booking.BookUpdateDto;
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
+import com.example.accommodationbookingservice.dto.booking.BookingUpdateDto;
 import com.example.accommodationbookingservice.model.Booking;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.InjectionStrategy;
@@ -30,5 +30,5 @@ public interface BookingMapper {
     @Mapping(target = "checkIn", source = "checkInDate")
     @Mapping(target = "checkOut", source = "checkOutDate")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateBooking(BookUpdateDto dto, @MappingTarget Booking booking);
+    void updateBooking(BookingUpdateDto dto, @MappingTarget Booking booking);
 }
