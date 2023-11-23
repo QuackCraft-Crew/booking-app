@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long> {
     @Query("SELECT a FROM Accommodation a "
-            + "JOIN Booking b ON a.id = b.accommodation.id "
+            + "LEFT JOIN FETCH Booking b ON a.id = b.accommodation.id "
             + "WHERE b.id = :bookingId AND a.isDeleted = false")
     Accommodation findAccommodationByBookingId(@Param("bookingId") Long bookingId);
 }
