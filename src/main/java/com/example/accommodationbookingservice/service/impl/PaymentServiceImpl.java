@@ -9,6 +9,7 @@ import com.example.accommodationbookingservice.repository.PaymentRepository;
 import com.example.accommodationbookingservice.service.NotificationService;
 import com.example.accommodationbookingservice.service.PaymentService;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,11 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentMapper paymentMapper;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private ExecutorService executorService;
+
+    public PaymentServiceImpl() {
+    }
 
     @Override
     @Transactional
@@ -30,7 +36,10 @@ public class PaymentServiceImpl implements PaymentService {
         Booking booking = payment.getBooking();
         booking.setStatus(Booking.Status.CONFIRMED);
         payment.setStatus(Payment.Status.PAID);
-        notificationService.sendSuccessfulPaymentMessage();
+        executorService.execute(
+                () -> notificationService.sendSuccessfulPaymentMessage()
+
+        );
     }
 
     @Override
@@ -41,7 +50,9 @@ public class PaymentServiceImpl implements PaymentService {
         Booking booking = payment.getBooking();
         booking.setStatus(Booking.Status.CANCELED);
         payment.setStatus(Payment.Status.CANCELED);
-        notificationService.sendFailedPaymentMessage();
+        executorService.execute(
+                () -> notificationService.sendFailedPaymentMessage()
+        );
     }
 
     @Override

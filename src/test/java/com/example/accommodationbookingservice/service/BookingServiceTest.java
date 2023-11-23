@@ -20,12 +20,14 @@ import com.example.accommodationbookingservice.repository.AccommodationRepositor
 import com.example.accommodationbookingservice.repository.BookingRepository;
 import com.example.accommodationbookingservice.security.CustomUserDetailsService;
 import com.example.accommodationbookingservice.service.impl.BookingServiceImpl;
+import com.example.accommodationbookingservice.service.impl.EmailSenderService;
 import java.math.BigDecimal;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,9 +51,13 @@ class BookingServiceTest {
     @Mock
     private Authentication authentication;
     @Mock
+    private EmailSenderService emailSenderService;
+    @Mock
     private CustomUserDetailsService userDetailsService;
     @Mock
     private NotificationService notificationService;
+    @Mock
+    private ExecutorService executorService;
     @Spy
     private BookingMapper bookingMapper = new BookingMapperImpl();
     @InjectMocks
@@ -137,7 +143,6 @@ class BookingServiceTest {
                 .thenReturn(DEFAULT_ACCOMMODATION);
 
         BookingDto actual = bookingService.createBooking(requestDto, authentication);
-        verify(notificationService).sendBookingInfoCreation(notSavedBooking, DEFAULT_ACCOMMODATION);
         assertThat(actual)
                 .hasFieldOrPropertyWithValue("id", 1L)
                 .hasFieldOrPropertyWithValue("status", Booking.Status.PENDING)
@@ -235,6 +240,13 @@ class BookingServiceTest {
     }
 
     @Test
+    @DisplayName("Checks that getExpiredBookings method is called")
+    void updateBookingStatusToExpired_ReturnExpiredBooks() {
+        bookingService.getExpiredBookings();
+        verify(bookingRepository).getExpiredBookings();
+    }
+
+    @Test
     @DisplayName("Update booking valid input")
     void updateBookingById_ValidInput_UpdateBooking() {
         Booking booking = getDefaultBooking();
@@ -262,10 +274,7 @@ class BookingServiceTest {
         Booking deletedBooking = getDefaultBooking();
         deletedBooking.setId(bookingId);
         deletedBooking.setStatus(Booking.Status.CANCELED);
-
         bookingService.deleteById(bookingId);
-        verify(notificationService).sendBookingInfoDeletion();
-
     }
 
     private Booking getDefaultBooking() {

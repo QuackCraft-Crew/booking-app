@@ -17,7 +17,8 @@ class PaymentRepositoryTest {
     private PaymentRepository paymentRepository;
 
     @Test
-    @Sql(scripts = {"classpath:database/addresses/insert-address.sql",
+    @Sql(scripts = {"classpath:database/all/delete-all.sql",
+            "classpath:database/addresses/insert-address.sql",
             "classpath:database/accommodations/insert-accommodation.sql",
             "classpath:database/users/insert-users.sql",
             "classpath:database/bookings/insert-bookings.sql",
