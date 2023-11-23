@@ -9,6 +9,7 @@ import com.example.accommodationbookingservice.model.Address;
 import com.example.accommodationbookingservice.repository.AccommodationRepository;
 import com.example.accommodationbookingservice.repository.AddressRepository;
 import com.example.accommodationbookingservice.service.AccommodationService;
+import com.example.accommodationbookingservice.service.NotificationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationRepository accommodationRepository;
     private final AccommodationMapper accommodationMapper;
     private final AddressRepository addressRepository;
+    private final NotificationService notificationService;
 
     @Override
     public List<AccommodationDto> findAll(Pageable pageable) {
@@ -38,9 +40,11 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public AccommodationDto save(AccommodationRequestDto requestDto) {
-        return accommodationMapper.toDto(
-                accommodationRepository.save(accommodationMapper.toModel(
-                        requestDto)));
+        Accommodation accommodation = accommodationMapper.toModel(requestDto);
+        AccommodationDto savedAccommodation = accommodationMapper.toDto(
+                accommodationRepository.save(accommodation));
+        notificationService.sendReleasedAccommodationNotification(accommodation);
+        return savedAccommodation;
     }
 
     @Override

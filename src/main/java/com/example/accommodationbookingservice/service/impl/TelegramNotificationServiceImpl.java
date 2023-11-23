@@ -132,6 +132,30 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
         sendNotification(message);
     }
 
+    @Override
+    public void sendReleasedAccommodationNotification(Accommodation accommodation) {
+        String message = """
+                Hey, there is new accommodation available!
+                Check it out:
+                City: %s
+                Address: %s %s
+                Type: %s
+                Size: %s
+                Amenities: %s
+                Daily rate: %s
+                """;
+        String formatted = String.format(message,
+                accommodation.getAddress().getCity(),
+                accommodation.getAddress().getStreetName(),
+                accommodation.getAddress().getStreetNumber(),
+                accommodation.getType(),
+                accommodation.getSize(),
+                accommodation.getAmenities(),
+                accommodation.getDailyRate()
+        );
+        sendNotification(formatted);
+    }
+
     private void startCommandResponse(String chatId, String firstName) {
         String answer = "Hello, " + firstName + ", nice to meet you!";
         sendMessage(chatId, answer);

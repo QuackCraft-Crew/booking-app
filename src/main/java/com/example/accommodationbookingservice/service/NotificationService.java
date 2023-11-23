@@ -15,4 +15,6 @@ public interface NotificationService {
     void sendFailedPaymentMessage();
 
     void sendMessageToAdminChat(String message);
+
+    void sendReleasedAccommodationNotification(Accommodation accommodation);
 }
