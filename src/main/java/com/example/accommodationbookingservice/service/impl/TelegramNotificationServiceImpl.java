@@ -44,13 +44,15 @@ public class TelegramNotificationServiceImpl extends TelegramLongPollingBot
     @Override
     public void sendBookingInfoCreation(Booking booking, Accommodation accommodation) {
         String message = """
-                    Your booking is confirmed !
+                    Your booking is pending !
                     Type : %s
                     Country: %s
                     City: %s
                     Address: %s %s
                     Check-in time: %s
-                    Check-out time: %S
+                    Check-out time: %s
+                    
+                    In order to confirm booking, please make the payment.
                     """;
         String formatted = String.format(message,
                 accommodation.getType(),
