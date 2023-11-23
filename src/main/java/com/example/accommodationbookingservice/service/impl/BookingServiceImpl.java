@@ -21,6 +21,7 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -34,6 +35,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final CustomUserDetailsService userDetailsService;
     private final NotificationService notificationService;
+    private final ExecutorService executorService;
 
     @Override
     @Transactional
@@ -55,7 +57,11 @@ public class BookingServiceImpl implements BookingService {
         BookingDto bookingDto = bookingMapper.toBookingDto(bookingRepository.save(booking));
         Accommodation accommodation = accommodationRepository
                 .findAccommodationByBookingId(bookingDto.id());
-        notificationService.sendBookingInfoCreation(booking, accommodation);
+
+        executorService.execute(
+                () -> notificationService.sendBookingInfoCreation(booking, accommodation)
+        );
+
         return bookingDto;
     }
 
@@ -121,7 +127,7 @@ public class BookingServiceImpl implements BookingService {
                 );
 
         booking.setStatus(Status.CANCELED);
-        notificationService.sendBookingInfoDeletion();
+        executorService.execute(notificationService::sendBookingInfoDeletion);
     }
 
     @Override
