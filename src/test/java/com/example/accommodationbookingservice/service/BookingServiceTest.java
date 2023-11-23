@@ -9,27 +9,23 @@ import static org.mockito.Mockito.when;
 import com.example.accommodationbookingservice.dto.booking.BookingDto;
 import com.example.accommodationbookingservice.dto.booking.BookingRequestDto;
 import com.example.accommodationbookingservice.dto.booking.BookingUpdateDto;
-import com.example.accommodationbookingservice.dto.payment.PaymentResponseDto;
 import com.example.accommodationbookingservice.exception.NotAvailablePlacesToBook;
 import com.example.accommodationbookingservice.mapper.BookingMapper;
 import com.example.accommodationbookingservice.mapper.BookingMapperImpl;
 import com.example.accommodationbookingservice.model.Accommodation;
 import com.example.accommodationbookingservice.model.Address;
 import com.example.accommodationbookingservice.model.Booking;
-import com.example.accommodationbookingservice.model.Payment;
 import com.example.accommodationbookingservice.model.User;
 import com.example.accommodationbookingservice.repository.AccommodationRepository;
 import com.example.accommodationbookingservice.repository.BookingRepository;
 import com.example.accommodationbookingservice.security.CustomUserDetailsService;
 import com.example.accommodationbookingservice.service.impl.BookingServiceImpl;
-import java.awt.print.Book;
 import java.math.BigDecimal;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,14 +35,13 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
-    private final static Booking DEFAULT_BOOKING;
-    private final static Accommodation DEFAULT_ACCOMMODATION;
-    private final static Address DEFAULT_ADDRESS;
-    private final static User DEFAULT_USER;
+    private static final Booking DEFAULT_BOOKING;
+    private static final Accommodation DEFAULT_ACCOMMODATION;
+    private static final Address DEFAULT_ADDRESS;
+    private static final User DEFAULT_USER;
     @Mock
     private BookingRepository bookingRepository;
     @Mock
@@ -95,7 +90,8 @@ class BookingServiceTest {
                 LocalDate.of(2023, 11, 23), LocalDate.of(2023, 11, 22));
         DateTimeException actualException = assertThrows(DateTimeException.class, () ->
                 bookingService.createBooking(requestDto, authentication));
-        assertEquals("The check-in date must be earlier than the check-out", actualException.getMessage());
+        assertEquals("The check-in date must be earlier than the check-out",
+                actualException.getMessage());
     }
 
     @Test
@@ -107,11 +103,14 @@ class BookingServiceTest {
         when(authentication.getName()).thenReturn("testEmail");
         when(userDetailsService.loadUserByUsername("testEmail")).thenReturn(DEFAULT_USER);
         when(accommodationRepository.getReferenceById(1L)).thenReturn(DEFAULT_ACCOMMODATION);
-        when(bookingRepository.countAllByAccommodationIdAndDate(requestDto.accommodationId(), requestDto.checkInDate(),
-                requestDto.checkOutDate())).thenReturn(List.of(new Booking(), new Booking(), new Booking()));
-        NotAvailablePlacesToBook notAvailablePlacesToBook = assertThrows(NotAvailablePlacesToBook.class, () ->
+        when(bookingRepository.countAllByAccommodationIdAndDate(requestDto.accommodationId(),
+                requestDto.checkInDate(), requestDto.checkOutDate())).thenReturn(
+                        List.of(new Booking(), new Booking(), new Booking()));
+        NotAvailablePlacesToBook notAvailablePlacesToBook =
+                assertThrows(NotAvailablePlacesToBook.class, () ->
                 bookingService.createBooking(requestDto, authentication));
-        assertEquals("We haven't available places to book in this days", notAvailablePlacesToBook.getMessage());
+        assertEquals("We haven't available places to book in this days",
+                notAvailablePlacesToBook.getMessage());
     }
 
     @Test
@@ -130,10 +129,12 @@ class BookingServiceTest {
         when(authentication.getName()).thenReturn("testEmail");
         when(userDetailsService.loadUserByUsername("testEmail")).thenReturn(DEFAULT_USER);
         when(accommodationRepository.getReferenceById(1L)).thenReturn(DEFAULT_ACCOMMODATION);
-        when(bookingRepository.countAllByAccommodationIdAndDate(requestDto.accommodationId(), requestDto.checkInDate(),
+        when(bookingRepository.countAllByAccommodationIdAndDate(
+                requestDto.accommodationId(), requestDto.checkInDate(),
                 requestDto.checkOutDate())).thenReturn(Collections.emptyList());
         when(bookingRepository.save(notSavedBooking)).thenReturn(savedBooking);
-        when(accommodationRepository.findAccommodationByBookingId(1L)).thenReturn(DEFAULT_ACCOMMODATION);
+        when(accommodationRepository.findAccommodationByBookingId(1L))
+                .thenReturn(DEFAULT_ACCOMMODATION);
 
         BookingDto actual = bookingService.createBooking(requestDto, authentication);
         verify(notificationService).sendBookingInfoCreation(notSavedBooking, DEFAULT_ACCOMMODATION);
@@ -190,7 +191,8 @@ class BookingServiceTest {
         Booking b2 = getDefaultBooking();
         b2.setId(2L);
         List<Booking> bookings = List.of(b1, b2);
-        when(bookingRepository.findByUserIdAndStatus(userId, Booking.Status.PENDING)).thenReturn(bookings);
+        when(bookingRepository.findByUserIdAndStatus(userId, Booking.Status.PENDING))
+                .thenReturn(bookings);
 
         List<BookingDto> actual = bookingService.findByUserIdAndStatus(userId,
                 Booking.Status.PENDING, Pageable.ofSize(10));
