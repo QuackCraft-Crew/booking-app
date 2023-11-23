@@ -99,14 +99,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional
     public void deleteById(Long id) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Cannot find booking by id " + id)
                 );
 
-        bookingRepository.deleteById(id);
+        bookingRepository.updateStatus(id, Status.CANCELED);
         notificationService.sendBookingInfoDeleting(booking);
     }
 
