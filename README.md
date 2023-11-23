@@ -108,4 +108,84 @@ We designed and implemented all the **necessary business processes** that will c
   <summary><img src="https://www.liquibase.org/wp-content/themes/liquibase/assets/img/cta-icon.svg" width="30" height="30"/> Liquibase </summary>
 
 `Ensures the application database is updated along with the application code.`
-</details>
+</details> 
+
+
+---
+
+# Project architecture: 
+\
+![architecture](assets/architecture.png) 
+
+---
+
+# Database structure:
+\
+![scheme](assets/db_scheme.png)
+
+---
+
+# Project controllers with the following endpoints:
+
+# API Endpoints Overview
+
+1. [Authentication Controller](#authentication-controller)
+2. [User Controller](#user-controller)
+3. [Accommodation Controller](#accommodation-controller)
+4. [Booking Controller](#booking-controller)
+5. [Payment Controller (Stripe)](#payment-controller-stripe)
+
+---
+
+## Authentication Controller:
+
+| **HTTP method** | **Endpoint**  | **Role** | **Function** |
+|:----------------:|:--------------:|:--------:|:-------------|
+| POST | /register | ALL | Allows users to register a new account. |
+| POST | /login | ALL | Get JWT tokens for authentication. |
+
+---
+
+## User Controller: Managing authentication and user registration
+
+| **HTTP method** | **Endpoint**          | **Role** | **Function**                                                        |
+|:----------------:|:----------------------:|:--------:|:--------------------------------------------------------------------|
+| PUT              | /users/{id}/role      |  ADMIN   | Enables admins to update their roles, providing role-based access.  |
+| GET              | /users/me             |   ALL    | Retrieves the profile information for the currently logged-in user. |
+| PUT/PATCH        | /users/me             |   ALL    | Allows users to update their profile information.                   |
+
+---
+
+## Accommodation Controller: Managing accommodation inventory (CRUD for Accommodations)
+
+| **HTTP method** | **Endpoint**         | **Role** | **Function**                                         |
+|:----------------:|:---------------------:|:--------:|:-----------------------------------------------------|
+| POST             | /accommodations      |  ADMIN   | Permits the addition of new accommodations.          |
+| GET              | /accommodations      |   ALL    | Provides a list of available accommodations.        |
+| GET              | /accommodations/{id} |   ALL    | Retrieves detailed information about a specific accommodation. |
+| PUT/PATCH        | /accommodations/{id} |  ADMIN   | Allows updates to accommodation details, including inventory management. |
+| DELETE           | /accommodations/{id} |   ADMIN    | Enables the removal of accommodations.                |
+
+---
+
+## Booking Controller: Managing users' bookings
+
+| **HTTP method** | **Endpoint**         | **Role**   | **Function**                                          |
+|:----------------:|:---------------------:|:----------:|:------------------------------------------------------|
+| POST             | /bookings            | ALL        | Permits the creation of new accommodation bookings.   |
+| GET              | /bookings/?user_id=...&status=... | ADMIN | Retrieves bookings based on user ID and their status. |
+| GET              | /bookings/my         | ALL        | Retrieves user bookings.                              |
+| GET              | /bookings/{id}       | ALL        | Provides information about a specific booking.        |
+| PUT/PATCH        | /bookings/{id}       | ADMIN        | Allows admins to update  booking details.        |
+| DELETE           | /bookings/{id}       | ADMIN        | Enables the cancellation of bookings.                 |
+
+---
+
+## Payment Controller (Stripe): Facilitates payments for bookings through the platform. Interacts with Stripe API. Use stripe-java library.
+
+| **HTTP method** | **Endpoint**         | **Role**   | **Function**                                         |
+|:----------------:|:---------------------:|:----------:|:-----------------------------------------------------|
+| GET              | /payments/?user_id=...| ALL        | Retrieves payment information for users.             |
+| POST             | /payments/            | ALL        | Initiates payment sessions for booking transactions. |
+| GET              | /payments/success/    | ALL        | Handles successful payment processing through Stripe redirection. |
+| GET              | /payments/cancel/     | ALL        | Manages payment cancellation and returns payment paused messages during Stripe redirection. |
