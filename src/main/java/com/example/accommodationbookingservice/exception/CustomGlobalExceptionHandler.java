@@ -37,6 +37,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NotAvailablePlacesToBook.class)
+    public ResponseEntity<Object> handleNotAvailablePlacesToBook(
+            NotAvailablePlacesToBook ex) {
+        return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.NOT_ACCEPTABLE);
+    }
+
     @ExceptionHandler(DateTimeException.class)
     public ResponseEntity<Object> handleDateTimeException(
             DateTimeException ex) {
