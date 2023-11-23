@@ -22,7 +22,8 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = "classpath:database/users/insert-users.sql",
+    @Sql(scripts = {"classpath:database/all/delete-all.sql",
+            "classpath:database/users/insert-users.sql"},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @DisplayName("Get user bookings by valid user id")
     void getTrue_validEmail_AssertTrue() {
