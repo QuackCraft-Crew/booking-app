@@ -235,6 +235,13 @@ class BookingServiceTest {
     }
 
     @Test
+    @DisplayName("Checks that getExpiredBookings method is called")
+    void updateBookingStatusToExpired_ReturnExpiredBooks() {
+        bookingService.getExpiredBookings();
+        verify(bookingRepository).getExpiredBookings();
+    }
+
+    @Test
     @DisplayName("Update booking valid input")
     void updateBookingById_ValidInput_UpdateBooking() {
         Booking booking = getDefaultBooking();
