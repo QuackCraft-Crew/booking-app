@@ -206,6 +206,6 @@ We designed and implemented all the **necessary business processes** that will c
 3. Create a .env file with the necessary environment variables(use .env.sample as a reference)
 4. Run the command `mvn clean package`
 5. Build and start the Docker containers with `docker-compose up --build`
-6. The application should be running locally at http://localhost:8088
-7. Swagger is available for testing at http://localhost:8088/swagger-ui/index.html#/
+6. The application should be running locally at http://localhost:8089
+7. Swagger is available for testing at http://localhost:8089/swagger-ui/index.html#/
 
